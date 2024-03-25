@@ -10,19 +10,16 @@ public class DataResponse<T> {
     private int code;
     private String message;
 
-
     public DataResponse(T data, ErrorMessage message) {
         this.data = data;
         this.code = message.getCode();
         this.message = message.getMessage();
     }
 
-
     public DataResponse(ErrorMessage message) {
         this.code = message.getCode();
         this.message = message.getMessage();
     }
-
 
     public static <T> DataResponse<T> build(ErrorMessage messages) {
         return new DataResponse<>(messages);
