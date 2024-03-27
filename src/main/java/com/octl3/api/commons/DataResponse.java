@@ -21,6 +21,12 @@ public class DataResponse<T> {
         this.message = message.getMessage();
     }
 
+    public DataResponse(T data) {
+        this.data = data;
+        this.code = ErrorMessages.SUCCESS.getCode();
+        this.message = ErrorMessages.SUCCESS.getMessage();
+    }
+
     public static <T> DataResponse<T> build(ErrorMessage messages) {
         return new DataResponse<>(messages);
     }
@@ -30,6 +36,6 @@ public class DataResponse<T> {
     }
 
     public static <T> DataResponse<T> ok(T data) {
-        return new DataResponse<>(data, ErrorMessages.SUCCESS);
+        return new DataResponse<>(data);
     }
 }
