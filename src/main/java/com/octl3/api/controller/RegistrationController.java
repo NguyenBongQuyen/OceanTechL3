@@ -24,4 +24,13 @@ public class RegistrationController {
         return DataResponse.ok(registrationService.getAll());
     }
 
+    @GetMapping("/{id}")
+    public DataResponse<RegistrationDto> getById(@PathVariable("id") Long id) {
+        return DataResponse.ok(registrationService.getById(id));
+    }
+
+    @GetMapping("/get-by-status")
+    public DataResponse<List<RegistrationDto>> getByStatus(@RequestParam("status") String status) {
+        return DataResponse.ok(registrationService.getByStatus(status));
+    }
 }
