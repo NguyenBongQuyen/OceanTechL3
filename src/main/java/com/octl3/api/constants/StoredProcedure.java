@@ -20,6 +20,7 @@ public class StoredProcedure {
         public static final String REGISTRATION_DTO_MAPPER = "RegistrationDtoMapper";
         public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
         public static final String CERTIFICATE_DTO_MAPPER = "CertificateDtoMapper";
+        public static final String PROMOTION_DTO_MAPPER = "PromotionDtoMapper";
 
     }
 
@@ -44,6 +45,7 @@ public class StoredProcedure {
         public static final String GET_ALL_REGISTRATION = "get_all_registration";
         public static final String GET_REGISTRATION_BY_ID = "get_registration_by_id";
         public static final String GET_REGISTRATION_BY_STATUS = "get_registration_by_status";
+        public static final String SUBMIT_REGISTRATION = "submit_registration";
         public static final String UPDATE_REGISTRATION_BY_LEADER = "update_registration_by_leader";
         public static final String UPDATE_REGISTRATION_BY_MANAGER = "update_registration_by_manager";
         public static final String DELETE_REGISTRATION = "delete_registration";

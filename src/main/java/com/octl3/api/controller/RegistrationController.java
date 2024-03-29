@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/registration")
+@RequestMapping("/api/v1/registration")
 public class RegistrationController {
     private final RegistrationService registrationService;
 
@@ -33,4 +33,15 @@ public class RegistrationController {
     public DataResponse<List<RegistrationDto>> getByStatus(@RequestParam("status") String status) {
         return DataResponse.ok(registrationService.getByStatus(status));
     }
+
+    @PutMapping("/{id}")
+    public DataResponse<RegistrationDto> updateByManager(@PathVariable("id") Long id, @RequestBody RegistrationDto registrationDto) {
+        return DataResponse.ok(registrationService.updateByManager(id, registrationDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable("id") long id) {
+        registrationService.deleteById(id);
+    }
+
 }
