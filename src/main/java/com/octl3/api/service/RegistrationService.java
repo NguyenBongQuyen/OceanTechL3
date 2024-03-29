@@ -10,14 +10,16 @@ public interface RegistrationService {
 
     List<RegistrationDto> getAll();
 
-    RegistrationDto getById(Long id);
+    RegistrationDto getById(long id);
 
     List<RegistrationDto> getByStatus(String status);
 
-    RegistrationDto updateByManager(Long id, RegistrationDto registrationDto);
+    RegistrationDto updateByManager(long id, RegistrationDto registrationDto);
 
-    RegistrationDto updateByLeader(Long id, RegistrationDto registrationDto);
+    void submit(long id, RegistrationDto registrationDto);
 
-    void deleteById(Long id);
+    RegistrationDto updateByLeader(long id, RegistrationDto registrationDto);
+
+    void deleteById(long id);
 
 }
