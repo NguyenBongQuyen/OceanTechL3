@@ -25,6 +25,7 @@ public class RegistrationDto {
     private String createBy;
     private String content;
     private String status;
+    private LocalDate submitDate;
     private LocalDate rejectDate;
     private String rejectReason;
     private LocalDate acceptDate;
