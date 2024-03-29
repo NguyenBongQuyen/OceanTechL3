@@ -1,4 +1,4 @@
-package com.octl3.api.service.Impl;
+package com.octl3.api.service.impl;
 
 import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.service.RegistrationService;

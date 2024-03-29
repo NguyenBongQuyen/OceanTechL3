@@ -18,7 +18,8 @@ public class StoredProcedure {
 
     public static class Mapper {
         public static final String REGISTRATION_DTO_MAPPER = "RegistrationDtoMapper";
-
+        public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
+        public static final String CERTIFICATE_DTO_MAPPER = "CertificateDtoMapper";
 
     }
 
@@ -27,7 +28,11 @@ public class StoredProcedure {
     }
 
     public static class Certificate {
-
+        public static final String CREATE = "create_certificate";
+        public static final String GET_BY_ID = "get_certificate_by_id";
+        public static final String GET_ALL = "get_all_certificates";
+        public static final String UPDATE = "update_certificate";
+        public static final String DELETE = "delete_certificate";
     }
 
     public static class Relationship {
