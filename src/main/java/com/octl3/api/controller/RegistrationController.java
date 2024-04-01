@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
+import static com.octl3.api.constants.MessageConst.SUBMIT_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/registration")
@@ -39,9 +42,16 @@ public class RegistrationController {
         return DataResponse.ok(registrationService.updateByManager(id, registrationDto));
     }
 
+    @PutMapping("/submit/{id}")
+    public DataResponse<String> submit(@PathVariable("id") Long id, @RequestBody RegistrationDto registrationDto) {
+        registrationService.submit(id, registrationDto);
+        return DataResponse.ok(SUBMIT_SUCCESS);
+    }
+
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") long id) {
+    public DataResponse<String> deleteById(@PathVariable("id") long id) {
         registrationService.deleteById(id);
+        return DataResponse.ok(DELETE_SUCCESS);
     }
 
 }
