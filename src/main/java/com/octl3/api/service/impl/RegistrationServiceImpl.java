@@ -1,5 +1,7 @@
 package com.octl3.api.service.impl;
 
+import com.octl3.api.commons.exceptions.ErrorMessages;
+import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.service.RegistrationService;
@@ -94,7 +96,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
-        query.execute();
+        try {
+            int rowEffect = query.executeUpdate();
+            if (rowEffect == 0) {
+                throw new OctException(ErrorMessages.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
     }
 
 }
