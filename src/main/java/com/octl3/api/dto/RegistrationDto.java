@@ -31,32 +31,4 @@ public class RegistrationDto {
     private LocalDate acceptDate;
     private String note;
 
-    public RegistrationDto(RegistrationDto registrationDto) {
-        this.id = registrationDto.getId();
-        this.employeeId = registrationDto.getEmployeeId();
-        this.leaderId = registrationDto.getLeaderId();
-        this.createDate = registrationDto.getCreateDate();
-        this.createBy = registrationDto.getCreateBy();
-        this.content = registrationDto.getContent();
-        this.status = registrationDto.getStatus();
-        this.rejectDate = registrationDto.getRejectDate();
-        this.rejectReason = registrationDto.getRejectReason();
-        this.acceptDate = registrationDto.getAcceptDate();
-        this.note = registrationDto.getNote();
-    }
-
-//    public RegistrationDto(Long id, Long employeeId, Long leaderId, LocalDate createDate, String createBy, String content, String status, LocalDate rejectDate, String rejectReason, LocalDate acceptDate, String note) {
-//        this.id = id;
-//        this.employeeId = employeeId;
-//        this.leaderId = leaderId;
-//        this.createDate = createDate;
-//        this.createBy = createBy;
-//        this.content = content;
-//        this.status = status;
-//        this.rejectDate = rejectDate;
-//        this.rejectReason = rejectReason;
-//        this.acceptDate = acceptDate;
-//        this.note = note;
-//    }
-
 }
