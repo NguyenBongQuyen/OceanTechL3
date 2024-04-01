@@ -11,11 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.octl3.api.constants.Status.*;
 import static com.octl3.api.constants.StoredProcedure.Mapper.REGISTRATION_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.Registration.*;
@@ -51,7 +54,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_REGISTRATION_BY_ID, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
-        return (RegistrationDto) query.getSingleResult();
+        try {
+            return (RegistrationDto) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new OctException(ErrorMessages.NOT_FOUND);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -88,21 +95,35 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
-        return null;
+        if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
+            registrationDto.setAcceptDate(LocalDate.now());
+        }
+        if (registrationDto.getStatus().equals(REJECTED.getValue())) {
+            registrationDto.setRejectDate(LocalDate.now());
+        }
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_LEADER, REGISTRATION_DTO_MAPPER)
+                .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
+                .setParameter(REGISTRATION_ID_PARAM, id)
+                .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
+                .setParameter(REGISTRATION_JSON, JsonUtil.objectToJson(registrationDto));
+        query.execute();
+        return registrationDto;
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION)
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
+        int rowEffect;
         try {
-            int rowEffect = query.executeUpdate();
-            if (rowEffect == 0) {
-                throw new OctException(ErrorMessages.NOT_FOUND);
-            }
+            rowEffect = query.executeUpdate();
         } catch (Exception e) {
             throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+        if (rowEffect == 0) {
+            throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }
 
