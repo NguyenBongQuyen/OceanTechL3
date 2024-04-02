@@ -9,6 +9,8 @@ public class StoredProcedure {
     public static class Parameter {
         public static final String REGISTRATION_JSON = "registration_data_json";
         public static final String REGISTRATION_ID_PARAM = "registration_id_param";
+        public static final String SALARY_INCREMENT_JSON = "salary_increment_data_json";
+        public static final String SALARY_INCREMENT_ID_PARAM = "salary_increment_id_param";
         public static final String STATUS_PARAM = "status_param";
         public static final String EMPLOYEE_JSON = "employee_data_json";
         public static final String EMPLOYEE_ID_PARAM = "employee_id_param";
@@ -23,6 +25,8 @@ public class StoredProcedure {
 
     public static class Mapper {
         public static final String REGISTRATION_DTO_MAPPER = "RegistrationDtoMapper";
+        public static final String SALARY_INCREMENT_DTO_MAPPER = "SalaryIncrementDtoMapper";
+
         public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
         public static final String CERTIFICATE_DTO_MAPPER = "CertificateDtoMapper";
         public static final String RELATIONSHIP_FAMILY_DTO_MAPPER = "RelationshipFamilyDtoMapper";
@@ -70,7 +74,14 @@ public class StoredProcedure {
     }
 
     public static class SalaryIncrement {
-
+        public static final String CREATE_SALARY_INCREMENT = "create_salary_increment";
+        public static final String GET_ALL_SALARY_INCREMENT = "get_all_salary_increment";
+        public static final String GET_SALARY_INCREMENT_BY_ID = "get_salary_increment_by_id";
+        public static final String GET_SALARY_INCREMENT_BY_STATUS = "get_salary_increment_by_status";
+        public static final String SUBMIT_SALARY_INCREMENT = "submit_salary_increment";
+        public static final String UPDATE_SALARY_INCREMENT_BY_LEADER = "update_salary_increment_by_leader";
+        public static final String UPDATE_SALARY_INCREMENT_BY_MANAGER = "update_salary_increment_by_manager";
+        public static final String DELETE_SALARY_INCREMENT = "delete_salary_increment";
     }
 
     public static class ProposalAdvice {

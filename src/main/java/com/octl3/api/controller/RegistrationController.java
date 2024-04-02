@@ -13,7 +13,7 @@ import static com.octl3.api.constants.MessageConst.SUBMIT_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/registration")
+@RequestMapping("/api/v1/registrations")
 public class RegistrationController {
     private final RegistrationService registrationService;
 
@@ -32,7 +32,7 @@ public class RegistrationController {
         return DataResponse.ok(registrationService.getById(id));
     }
 
-    @GetMapping("/get-by-status")
+    @GetMapping("/by-status")
     public DataResponse<List<RegistrationDto>> getByStatus(@RequestParam("status") String status) {
         return DataResponse.ok(registrationService.getByStatus(status));
     }
@@ -48,7 +48,7 @@ public class RegistrationController {
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
-    @PutMapping("update-by-leader/{id}")
+    @PutMapping("/by-leader/{id}")
     public DataResponse<RegistrationDto> updateByLeader(@PathVariable("id") long id, @RequestBody RegistrationDto registrationDto) {
         return DataResponse.ok(registrationService.updateByLeader(id, registrationDto));
     }
