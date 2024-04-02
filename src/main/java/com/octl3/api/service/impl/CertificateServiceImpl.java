@@ -1,6 +1,8 @@
 package com.octl3.api.service.impl;
 
-import com.octl3.api.constants.StoredProcedure.*;
+import com.octl3.api.constants.StoredProcedure.Certificate;
+import com.octl3.api.constants.StoredProcedure.Mapper;
+import com.octl3.api.constants.StoredProcedure.Parameter;
 import com.octl3.api.dto.CertificateDto;
 import com.octl3.api.service.CertificateService;
 import com.octl3.api.utils.JsonUtil;
@@ -19,30 +21,50 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public CertificateDto create(CertificateDto certificateDto) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(Certificate.CREATE, Mapper.CERTIFICATE_DTO_MAPPER)
-                .registerStoredProcedureParameter(Parameter.REGISTRATION_JSON, String.class, ParameterMode.IN)
-                .setParameter(Parameter.REGISTRATION_JSON, JsonUtil.objectToJson(certificateDto));
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(Certificate.CREATE, Mapper.CERTIFICATE_DTO_MAPPER)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
+                .setParameter(Parameter.CERTIFICATE_JSON, JsonUtil.objectToJson(certificateDto));
         query.execute();
         return certificateDto;
     }
 
     @Override
     public CertificateDto getById(int id) {
-        return null;
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(Certificate.GET_BY_ID, Mapper.CERTIFICATE_DTO_MAPPER)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .setParameter(Parameter.CERTIFICATE_ID_PARAM, id);
+        return (CertificateDto) query.getSingleResult();
     }
 
     @Override
     public List<CertificateDto> getAll() {
-        return null;
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(Certificate.GET_ALL, Mapper.CERTIFICATE_DTO_MAPPER);
+        @SuppressWarnings("unchecked")
+        List<CertificateDto> resultList = query.getResultList();
+        return resultList;
     }
 
     @Override
     public CertificateDto update(int id, CertificateDto certificateDto) {
-        return null;
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(Certificate.UPDATE, Mapper.CERTIFICATE_DTO_MAPPER)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .setParameter(Parameter.CERTIFICATE_ID_PARAM, id)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
+                .setParameter(Parameter.CERTIFICATE_JSON, JsonUtil.objectToJson(certificateDto));
+        query.execute();
+        return certificateDto;
     }
 
     @Override
     public void deleteById(int id) {
-
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(Certificate.DELETE)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .setParameter(Parameter.CERTIFICATE_ID_PARAM, id);
+        query.execute();
     }
 }
