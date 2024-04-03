@@ -97,6 +97,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
+
         }
         if (registrationDto.getStatus().equals(REJECTED.getValue())) {
             registrationDto.setRejectDate(LocalDate.now());
