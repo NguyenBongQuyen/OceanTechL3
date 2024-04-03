@@ -27,4 +27,20 @@ public class EmployeeDto {
     private String team;
     private String createBy;
 
+    public EmployeeDto(EmployeeProfileDto employeeProfileDto) {
+        if (employeeProfileDto == null) {
+            return;
+        }
+        this.name = employeeProfileDto.getName();
+        this.code = employeeProfileDto.getCode();
+        this.dateOfBirth = employeeProfileDto.getDateOfBirth();
+        this.gender = employeeProfileDto.getGender();
+        this.phone = employeeProfileDto.getPhone();
+        this.email = employeeProfileDto.getEmail();
+        this.address = employeeProfileDto.getAddress();
+        this.citizenId = employeeProfileDto.getCitizenId();
+        this.team = employeeProfileDto.getTeam();
+        this.createBy = employeeProfileDto.getCreateBy();
+    }
+
 }

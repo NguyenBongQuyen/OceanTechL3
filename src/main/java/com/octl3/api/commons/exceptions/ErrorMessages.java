@@ -15,6 +15,7 @@ public enum ErrorMessages implements ErrorMessage {
     NOT_FOUND(404, "Resource not found"),
     DUPLICATE_DATA(405, "Data duplicate"),
     FILE_UPLOAD_ERROR(406, "File upload error"),
+    FILE_DELETE_ERROR(406, "File delete error"),
     NOT_ALLOW(407, "Not allow"),
     CONVERT_JSON_ERROR(408, "Convert json error");
 

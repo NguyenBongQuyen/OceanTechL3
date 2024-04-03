@@ -25,8 +25,8 @@ public class CertificateController {
     }
 
     @GetMapping
-    public DataResponse<List<CertificateDto>> getAll() {
-        return DataResponse.ok(certificateService.getAll());
+    public DataResponse<List<CertificateDto>> getByEmployeeId(@RequestParam("employeeId") int employeeId) {
+        return DataResponse.ok(certificateService.getByEmployeeId(employeeId));
     }
 
     @PutMapping("/{id}")

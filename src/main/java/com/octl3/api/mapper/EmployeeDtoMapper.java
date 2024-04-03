@@ -29,6 +29,6 @@ import java.time.LocalDate;
                 }
         )
 )
-public class EmployeeMapper {
+public class EmployeeDtoMapper {
 
 }

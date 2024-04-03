@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RelationshipFamilyDto {
+public class RelationshipDto {
     private Integer id;
     private Integer employeeId;
     private String name;

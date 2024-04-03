@@ -29,7 +29,7 @@ public class StoredProcedure {
 
         public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
         public static final String CERTIFICATE_DTO_MAPPER = "CertificateDtoMapper";
-        public static final String RELATIONSHIP_FAMILY_DTO_MAPPER = "RelationshipFamilyDtoMapper";
+        public static final String RELATIONSHIP_DTO_MAPPER = "RelationshipDtoMapper";
         public static final String PROMOTION_DTO_MAPPER = "PromotionDtoMapper";
         public static final String END_OF_EMPLOYEE_DTO_MAPPER = "EndOfEmployeeDtoMapper";
     }
@@ -45,7 +45,7 @@ public class StoredProcedure {
     public static class Certificate {
         public static final String CREATE = "create_certificate";
         public static final String GET_BY_ID = "get_certificate_by_id";
-        public static final String GET_ALL = "get_all_certificates";
+        public static final String GET_BY_EMPLOYEE_ID = "get_certificate_by_employee_id";
         public static final String UPDATE = "update_certificate";
         public static final String DELETE = "delete_certificate";
     }
@@ -53,7 +53,7 @@ public class StoredProcedure {
     public static class Relationship {
         public static final String CREATE = "create_relationship";
         public static final String GET_BY_ID = "get_relationship_by_id";
-        public static final String GET_ALL = "get_all_relationships";
+        public static final String GET_BY_EMPLOYEE_ID = "get_relationship_by_employee_id";
         public static final String UPDATE = "update_relationship";
         public static final String DELETE = "delete_relationship";
     }
