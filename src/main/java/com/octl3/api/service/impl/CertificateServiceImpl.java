@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,12 +40,22 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<CertificateDto> getAll() {
+    public List<CertificateDto> getByEmployeeId(int employeeId) {
         StoredProcedureQuery query =
-                entityManager.createStoredProcedureQuery(Certificate.GET_ALL, Mapper.CERTIFICATE_DTO_MAPPER);
-        @SuppressWarnings("unchecked")
-        List<CertificateDto> resultList = query.getResultList();
-        return resultList;
+                entityManager.createStoredProcedureQuery(Certificate.GET_BY_EMPLOYEE_ID, Mapper.CERTIFICATE_DTO_MAPPER)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .setParameter(Parameter.EMPLOYEE_ID_PARAM, employeeId);
+        return castResultListToListCertificateDto(query.getResultList());
+    }
+
+    private List<CertificateDto> castResultListToListCertificateDto(List<?> resultList) {
+        List<CertificateDto> certificateDtoList = new ArrayList<>();
+        for (Object object : resultList) {
+            if (object instanceof CertificateDto) {
+                certificateDtoList.add((CertificateDto) object);
+            }
+        }
+        return certificateDtoList;
     }
 
     @Override

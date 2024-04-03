@@ -1,7 +1,6 @@
 package com.octl3.api.mapper;
 
 import com.octl3.api.dto.CertificateDto;
-import com.octl3.api.dto.EmployeeDto;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -25,6 +24,6 @@ import java.time.LocalDate;
                 }
         )
 )
-public class CertificateMapper {
+public class CertificateDtoMapper {
 
 }

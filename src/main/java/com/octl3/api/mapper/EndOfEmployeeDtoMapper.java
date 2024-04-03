@@ -22,6 +22,6 @@ import java.time.LocalDate;
                 @ColumnResult(name = "storage_number", type = Integer.class)
         }
 )
-public class EndOfEmployeeMapper {
+public class EndOfEmployeeDtoMapper {
 
 }
