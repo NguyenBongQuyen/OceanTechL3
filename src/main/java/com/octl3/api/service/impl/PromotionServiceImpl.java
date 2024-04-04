@@ -39,8 +39,7 @@ public class PromotionServiceImpl implements PromotionService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_JSON, String.class, ParameterMode.IN)
                 .setParameter(PROMOTION_JSON, JsonUtil.objectToJson(promotionDto));
-        query.execute();
-        return promotionDto;
+        return (PromotionDto) query.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -78,8 +77,7 @@ public class PromotionServiceImpl implements PromotionService {
                 .setParameter(PROMOTION_ID_PARAM, id)
                 .registerStoredProcedureParameter(PROMOTION_JSON, String.class, ParameterMode.IN)
                 .setParameter(PROMOTION_JSON, JsonUtil.objectToJson(promotionDto));
-        query.execute();
-        return promotionDto;
+        return (PromotionDto) query.getSingleResult();
     }
 
     @Override
@@ -108,8 +106,7 @@ public class PromotionServiceImpl implements PromotionService {
                 .setParameter(PROMOTION_ID_PARAM, id)
                 .registerStoredProcedureParameter(PROMOTION_JSON, String.class, ParameterMode.IN)
                 .setParameter(PROMOTION_JSON, JsonUtil.objectToJson(promotionDto));
-        query.execute();
-        return promotionDto;
+        return (PromotionDto) query.getSingleResult();
     }
 
     @Override
