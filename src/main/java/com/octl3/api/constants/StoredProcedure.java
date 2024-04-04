@@ -13,6 +13,8 @@ public class StoredProcedure {
         public static final String SALARY_INCREMENT_ID_PARAM = "salary_increment_id_param";
         public static final String PROMOTION_JSON = "promotion_data_json";
         public static final String PROMOTION_ID_PARAM = "promotion_id_param";
+        public static final String PROPOSAL_ADVICE_JSON = "proposal_advice_data_json";
+        public static final String PROPOSAL_ADVICE_ID_PARAM = "proposal_advice_id_param";
         public static final String STATUS_PARAM = "status_param";
         public static final String EMPLOYEE_JSON = "employee_data_json";
         public static final String EMPLOYEE_ID_PARAM = "employee_id_param";
@@ -33,6 +35,7 @@ public class StoredProcedure {
         public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
         public static final String CERTIFICATE_DTO_MAPPER = "CertificateDtoMapper";
         public static final String RELATIONSHIP_DTO_MAPPER = "RelationshipDtoMapper";
+        public static final String PROPOSAL_ADVICE_DTO_MAPPER = "ProposalAdviceDtoMapper";
         public static final String PROMOTION_DTO_MAPPER = "PromotionDtoMapper";
         public static final String END_OF_EMPLOYEE_DTO_MAPPER = "EndOfEmployeeDtoMapper";
     }
@@ -99,7 +102,14 @@ public class StoredProcedure {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ProposalAdvice {
-
+        public static final String CREATE_PROPOSAL_ADVICE = "create_proposal_advice";
+        public static final String GET_ALL_PROPOSAL_ADVICE = "get_all_proposal_advice";
+        public static final String GET_PROPOSAL_ADVICE_BY_ID = "get_proposal_advice_by_id";
+        public static final String GET_PROPOSAL_ADVICE_BY_STATUS = "get_proposal_advice_by_status";
+        public static final String SUBMIT_PROPOSAL_ADVICE = "submit_proposal_advice";
+        public static final String UPDATE_PROPOSAL_ADVICE_BY_LEADER = "update_proposal_advice_by_leader";
+        public static final String UPDATE_PROPOSAL_ADVICE_BY_MANAGER = "update_proposal_advice_by_manager";
+        public static final String DELETE_PROPOSAL_ADVICE = "delete_proposal_advice";
     }
 
     public static class EndOfEmployee {
