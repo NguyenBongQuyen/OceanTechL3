@@ -38,8 +38,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_JSON, JsonUtil.objectToJson(registrationDto));
-        query.execute();
-        return registrationDto;
+        return (RegistrationDto) query.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -77,8 +76,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .setParameter(REGISTRATION_ID_PARAM, id)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_JSON, JsonUtil.objectToJson(registrationDto));
-        query.execute();
-        return registrationDto;
+        return (RegistrationDto) query.getSingleResult();
     }
 
     @Override
@@ -97,7 +95,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
-
         }
         if (registrationDto.getStatus().equals(REJECTED.getValue())) {
             registrationDto.setRejectDate(LocalDate.now());
@@ -107,8 +104,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .setParameter(REGISTRATION_ID_PARAM, id)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_JSON, JsonUtil.objectToJson(registrationDto));
-        query.execute();
-        return registrationDto;
+        return (RegistrationDto) query.getSingleResult();
     }
 
     @Override
