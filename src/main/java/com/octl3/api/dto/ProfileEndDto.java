@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EndOfEmployeeDto {
+public class ProfileEndDto {
     private Integer id;
     private Integer registrationId;
     private Integer leaderId;
@@ -21,6 +21,7 @@ public class EndOfEmployeeDto {
     private String endBy;
     private String reason;
     private String status;
+    private LocalDate submitDate;
     private LocalDate rejectDate;
     private String rejectReason;
     private LocalDate acceptDate;

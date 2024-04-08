@@ -4,7 +4,6 @@ import com.octl3.api.constants.StoredProcedure.Employee;
 import com.octl3.api.constants.StoredProcedure.Mapper;
 import com.octl3.api.constants.StoredProcedure.Parameter;
 import com.octl3.api.dto.EmployeeDto;
-import com.octl3.api.dto.EmployeeProfileDto;
 import com.octl3.api.service.EmployeeService;
 import com.octl3.api.utils.JsonUtil;
 import com.octl3.api.utils.UploadFile;
@@ -26,15 +25,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EntityManager entityManager;
 
     @Override
-    public EmployeeDto create(EmployeeProfileDto employeeProfileDto, MultipartFile fileImage) {
-        EmployeeDto employeeDto = new EmployeeDto(employeeProfileDto);
+    public EmployeeDto create(EmployeeDto employeeDto, MultipartFile fileImage) {
         if (!fileImage.isEmpty()) {
             employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
         }
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.CREATE, Mapper.EMPLOYEE_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_JSON, String.class, ParameterMode.IN)
-                        .setParameter(Parameter.EMPLOYEE_JSON, JsonUtil.objectToJson(employeeProfileDto));
+                        .setParameter(Parameter.EMPLOYEE_JSON, JsonUtil.objectToJson(employeeDto));
         query.execute();
         return employeeDto;
     }
@@ -67,8 +65,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto update(int id, EmployeeDto employeeDto, MultipartFile fileImage) {
         if (!fileImage.isEmpty()) {
-            employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
             UploadFile.deleteImage(getById(id).getImage());
+            employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
         }
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.UPDATE, Mapper.EMPLOYEE_DTO_MAPPER)
