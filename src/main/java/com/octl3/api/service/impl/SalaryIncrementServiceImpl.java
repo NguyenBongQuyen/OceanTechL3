@@ -39,8 +39,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_JSON, String.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_JSON, JsonUtil.objectToJson(salaryIncrementDto));
-        query.execute();
-        return salaryIncrementDto;
+        return (SalaryIncrementDto) query.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -78,8 +77,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_JSON, String.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_JSON, JsonUtil.objectToJson(salaryIncrementDto));
-        query.execute();
-        return salaryIncrementDto;
+        return (SalaryIncrementDto) query.getSingleResult();
     }
 
     @Override
@@ -107,8 +105,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_JSON, String.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_JSON, JsonUtil.objectToJson(salaryIncrementDto));
-        query.execute();
-        return salaryIncrementDto;
+        return (SalaryIncrementDto) query.getSingleResult();
     }
 
     @Override
