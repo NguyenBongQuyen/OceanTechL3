@@ -4,17 +4,18 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.UUID;
 
 import static com.octl3.api.constants.FileConst.PATH_UPLOAD_FOLDER;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UploadFile {
     public static String uploadImage(MultipartFile fileImage, String prefix) {
@@ -35,9 +36,10 @@ public class UploadFile {
 
     public static void deleteImage(String fileName) {
         try {
-            String filePath = PATH_UPLOAD_FOLDER + fileName;
-            Path path = Paths.get(filePath);
-            Files.delete(path);
+            File file = new File(fileName);
+            if (file.exists()) {
+                Files.delete(Paths.get(fileName));
+            }
         } catch (Exception e) {
             throw new OctException(ErrorMessages.FILE_DELETE_ERROR);
         }
