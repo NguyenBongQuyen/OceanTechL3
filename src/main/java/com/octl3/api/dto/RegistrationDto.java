@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@MappedSuperclass
 public class RegistrationDto {
 
     private Long id;
