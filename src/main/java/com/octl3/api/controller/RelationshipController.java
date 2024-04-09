@@ -1,6 +1,7 @@
 package com.octl3.api.controller;
 
 import com.octl3.api.commons.DataResponse;
+import com.octl3.api.constants.MessageConst;
 import com.octl3.api.dto.RelationshipDto;
 import com.octl3.api.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,8 @@ public class RelationshipController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") int id) {
         relationshipService.deleteById(id);
+        return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }
 }

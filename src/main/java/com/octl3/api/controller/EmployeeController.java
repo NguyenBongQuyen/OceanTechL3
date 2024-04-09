@@ -1,8 +1,8 @@
 package com.octl3.api.controller;
 
 import com.octl3.api.commons.DataResponse;
+import com.octl3.api.constants.MessageConst;
 import com.octl3.api.dto.EmployeeDto;
-import com.octl3.api.dto.EmployeeProfileDto;
 import com.octl3.api.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +17,9 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public DataResponse<EmployeeDto> create(@RequestPart("employeeProfileDto") EmployeeProfileDto employeeProfileDto,
+    public DataResponse<EmployeeDto> create(@RequestPart("employeeDto") EmployeeDto employeeDto,
                                             @RequestPart("fileImage") MultipartFile fileImage) {
-        return DataResponse.ok(employeeService.create(employeeProfileDto, fileImage));
+        return DataResponse.ok(employeeService.create(employeeDto, fileImage));
     }
 
     @GetMapping("/{id}")
@@ -34,13 +34,14 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public DataResponse<EmployeeDto> update(@PathVariable("id") int id,
-                                            @RequestBody EmployeeDto employeeDto,
-                                            @RequestParam("file") MultipartFile file) {
-        return DataResponse.ok(employeeService.update(id, employeeDto, file));
+                                            @RequestPart("employeeDto") EmployeeDto employeeDto,
+                                            @RequestPart("fileImage") MultipartFile fileImage) {
+        return DataResponse.ok(employeeService.update(id, employeeDto, fileImage));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") int id) {
         employeeService.deleteById(id);
+        return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }
 }
