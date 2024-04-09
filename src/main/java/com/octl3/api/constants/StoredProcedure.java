@@ -39,6 +39,7 @@ public class StoredProcedure {
         public static final String PROFILE_END_DTO_MAPPER = "ProfileEndDtoMapper";
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Employee {
         public static final String CREATE = "create_employee";
         public static final String GET_BY_ID = "get_employee_by_id";
@@ -47,6 +48,7 @@ public class StoredProcedure {
         public static final String DELETE = "delete_employee";
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Certificate {
         public static final String CREATE = "create_certificate";
         public static final String GET_BY_ID = "get_certificate_by_id";
@@ -55,6 +57,7 @@ public class StoredProcedure {
         public static final String DELETE = "delete_certificate";
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Relationship {
         public static final String CREATE = "create_relationship";
         public static final String GET_BY_ID = "get_relationship_by_id";
@@ -111,6 +114,7 @@ public class StoredProcedure {
         public static final String DELETE_PROPOSAL_ADVICE = "delete_proposal_advice";
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ProfileEnd {
         public static final String CREATE = "create_profile_end";
         public static final String GET_BY_ID = "get_profile_end_by_id";

@@ -1,6 +1,7 @@
 package com.octl3.api.controller;
 
 import com.octl3.api.commons.DataResponse;
+import com.octl3.api.constants.MessageConst;
 import com.octl3.api.dto.CertificateDto;
 import com.octl3.api.service.CertificateService;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,9 @@ public class CertificateController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") int id) {
         certificateService.deleteById(id);
+        return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.octl3.api.controller;
 
 import com.octl3.api.commons.DataResponse;
+import com.octl3.api.constants.MessageConst;
 import com.octl3.api.dto.EmployeeDto;
 import com.octl3.api.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") int id) {
         employeeService.deleteById(id);
+        return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }
 }

@@ -29,8 +29,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
                 entityManager.createStoredProcedureQuery(ProfileEnd.CREATE, Mapper.PROFILE_END_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
-        query.execute();
-        return profileEndDto;
+        return (ProfileEndDto) query.getSingleResult();
     }
 
     @Override
@@ -69,8 +68,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
-        query.execute();
-        return profileEndDto;
+        return (ProfileEndDto) query.getSingleResult();
     }
 
     @Override
@@ -87,8 +85,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
-        query.execute();
-        return profileEndDto;
+        return (ProfileEndDto) query.getSingleResult();
     }
 
     @Override
