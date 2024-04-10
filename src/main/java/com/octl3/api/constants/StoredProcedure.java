@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 public class StoredProcedure {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Parameter {
+        public static final String USER_JSON = "user_data_json";
+        public static final String USERNAME_PARAM = "username_param";
+        public static final String ROLE_NAME_PARAM = "role_name_param";
+        public static final String ROLE_ID_PARAM = "role_id_param";
         public static final String REGISTRATION_JSON = "registration_data_json";
         public static final String REGISTRATION_ID_PARAM = "registration_id_param";
         public static final String SALARY_INCREMENT_JSON = "salary_increment_data_json";
@@ -29,6 +33,9 @@ public class StoredProcedure {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Mapper {
+        public static final String USER_RESPONSE_DTO_MAPPER = "UserResponseDtoMapper";
+        public static final String ROLE_DTO_MAPPER = "RoleDtoMapper";
+        public static final String USER_DTO_MAPPER = "UserDtoMapper";
         public static final String REGISTRATION_DTO_MAPPER = "RegistrationDtoMapper";
         public static final String SALARY_INCREMENT_DTO_MAPPER = "SalaryIncrementDtoMapper";
         public static final String EMPLOYEE_DTO_MAPPER = "EmployeeDtoMapper";
@@ -124,6 +131,18 @@ public class StoredProcedure {
         public static final String UPDATE_BY_LEADER = "update_profile_end_by_leader";
         public static final String SUBMIT = "submit_profile_end";
         public static final String DELETE = "delete_profile_end";
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class User {
+        public static final String CREATE_USER = "create_user";
+        public static final String GET_USER_BY_USERNAME = "get_user_by_username";
+        public static final String GET_ROLE_BY_NAME = "get_role_by_name";
+        public static final String GET_ROLE_BY_ID = "get_role_by_id";
+        public static final String IS_EXIST_ROLE_BY_ID = "is_exist_role_by_id";
+
+
+
     }
 
 }
