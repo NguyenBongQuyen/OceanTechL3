@@ -75,10 +75,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByManager(long id, RegistrationDto registrationDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getName().equals(getById(id).getCreateBy())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_MANAGER, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id)
@@ -89,10 +86,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void submit(long id, RegistrationDto registrationDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getName().equals(getById(id).getCreateBy())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
+        checkCreateBy(id);
         registrationDto.setStatus(PENDING.getValue());
         registrationDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_REGISTRATION, REGISTRATION_DTO_MAPPER)
@@ -105,13 +99,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
-        if (!userId.equals(getById(id).getLeaderId())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-
+        checkLeader(id);
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
         }
@@ -129,12 +117,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @Transactional
     public void deleteById(long id) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getName().equals(getById(id).getCreateBy())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
@@ -146,6 +129,21 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         if (rowEffect == 0) {
             throw new OctException(ErrorMessages.NOT_FOUND);
+        }
+    }
+
+    private void checkCreateBy(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+    }
+
+    private void checkLeader(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        if (!userId.equals(getById(id).getLeaderId())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
         }
     }
 }

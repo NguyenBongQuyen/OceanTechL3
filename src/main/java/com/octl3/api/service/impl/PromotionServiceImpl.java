@@ -4,6 +4,7 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.PromotionDto;
+import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.PromotionService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByManager(long id, PromotionDto promotionDto) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROMOTION_BY_MANAGER, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id)
@@ -85,6 +87,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void submit(long id, PromotionDto promotionDto) {
+        checkCreateBy(id);
         promotionDto.setStatus(Status.SUBMITTED.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROMOTION, PROMOTION_DTO_MAPPER)
@@ -97,6 +100,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByLeader(long id, PromotionDto promotionDto) {
+        checkLeader(id);
         if (promotionDto.getStatus().equals(ACCEPTED.getValue())) {
             promotionDto.setAcceptDate(LocalDate.now());
 
@@ -115,6 +119,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     @Transactional
     public void deleteById(long id) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id);
@@ -126,6 +131,21 @@ public class PromotionServiceImpl implements PromotionService {
         }
         if (rowEffect == 0) {
             throw new OctException(ErrorMessages.NOT_FOUND);
+        }
+    }
+
+    private void checkCreateBy(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+    }
+
+    private void checkLeader(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        if (!userId.equals(getById(id).getLeaderId())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
         }
     }
 

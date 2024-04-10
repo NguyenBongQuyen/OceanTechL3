@@ -4,6 +4,7 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.SalaryIncrementDto;
+import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.SalaryIncrementService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByManager(long id, SalaryIncrementDto salaryIncrementDto) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_SALARY_INCREMENT_BY_MANAGER, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id)
@@ -85,6 +87,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public void submit(long id, SalaryIncrementDto salaryIncrementDto) {
+        checkCreateBy(id);
         salaryIncrementDto.setStatus(Status.SUBMITTED.getValue());
         salaryIncrementDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
@@ -97,6 +100,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByLeader(long id, SalaryIncrementDto salaryIncrementDto) {
+        checkLeader(id);
         if (salaryIncrementDto.getStatus().equals(ACCEPTED.getValue())) {
             salaryIncrementDto.setAcceptDate(LocalDate.now());
         }
@@ -114,6 +118,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @Override
     @Transactional
     public void deleteById(long id) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id);
@@ -125,6 +130,21 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
         }
         if (rowEffect == 0) {
             throw new OctException(ErrorMessages.NOT_FOUND);
+        }
+    }
+
+    private void checkCreateBy(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+    }
+
+    private void checkLeader(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        if (!userId.equals(getById(id).getLeaderId())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
         }
     }
 

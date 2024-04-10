@@ -4,6 +4,7 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.ProposalAdviceDto;
+import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.ProposalAdviceService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByManager(long id, ProposalAdviceDto proposalAdviceDto) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROPOSAL_ADVICE_BY_MANAGER, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id)
@@ -85,6 +87,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
+        checkCreateBy(id);
         proposalAdviceDto.setStatus(Status.SUBMITTED.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
@@ -97,6 +100,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByLeader(long id, ProposalAdviceDto proposalAdviceDto) {
+        checkLeader(id);
         if (proposalAdviceDto.getStatus().equals(ACCEPTED.getValue())) {
             proposalAdviceDto.setAcceptDate(LocalDate.now());
         }
@@ -114,6 +118,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @Override
     @Transactional
     public void deleteById(long id) {
+        checkCreateBy(id);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id);
@@ -125,6 +130,21 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
         }
         if (rowEffect == 0) {
             throw new OctException(ErrorMessages.NOT_FOUND);
+        }
+    }
+
+    private void checkCreateBy(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+    }
+
+    private void checkLeader(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        if (!userId.equals(getById(id).getLeaderId())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
         }
     }
 }
