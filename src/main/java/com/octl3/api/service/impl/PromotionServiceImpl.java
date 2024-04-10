@@ -8,6 +8,8 @@ import com.octl3.api.service.PromotionService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -34,7 +36,8 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public PromotionDto create(PromotionDto promotionDto) {
         promotionDto.setCreateDate(LocalDate.now());
-        // set create by?
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        promotionDto.setCreateBy(authentication.getName());
         promotionDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_JSON, String.class, ParameterMode.IN)

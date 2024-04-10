@@ -4,10 +4,13 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.RegistrationDto;
+import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.RegistrationService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -33,7 +36,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public RegistrationDto create(RegistrationDto registrationDto) {
         registrationDto.setCreateDate(LocalDate.now());
-        // set create by?
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        registrationDto.setCreateBy(authentication.getName());
         registrationDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
@@ -71,6 +75,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByManager(long id, RegistrationDto registrationDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_MANAGER, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id)
@@ -81,7 +89,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void submit(long id, RegistrationDto registrationDto) {
-        registrationDto.setStatus(Status.SUBMITTED.getValue());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+        registrationDto.setStatus(PENDING.getValue());
         registrationDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
@@ -93,6 +105,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
+        if (!userId.equals(getById(id).getLeaderId())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
         }
@@ -110,6 +129,12 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @Transactional
     public void deleteById(long id) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getName().equals(getById(id).getCreateBy())) {
+            throw new OctException(ErrorMessages.NOT_ALLOW);
+        }
+
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
@@ -123,5 +148,4 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }
-
 }

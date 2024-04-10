@@ -10,6 +10,8 @@ public enum ErrorMessages implements ErrorMessage {
     BAD_REQUEST(400, "Bad request"),
     INVALID_VALUE(400_001, "Invalid value"),
     SAVE_DATABASE_ERROR(400_002, "Save database error"),
+    USERNAME_LOGIN_FAIL(400_003, "Login fail! Username incorrect."),
+    PASSWORD_LOGIN_FAIL(400_004, "Login fail! Password incorrect."),
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Resource not found"),

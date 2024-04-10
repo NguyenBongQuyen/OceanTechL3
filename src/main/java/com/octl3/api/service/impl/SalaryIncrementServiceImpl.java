@@ -8,6 +8,8 @@ import com.octl3.api.service.SalaryIncrementService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -34,7 +36,8 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @Override
     public SalaryIncrementDto create(SalaryIncrementDto salaryIncrementDto) {
         salaryIncrementDto.setCreateDate(LocalDate.now());
-        // set create by
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        salaryIncrementDto.setCreateBy(authentication.getName());
         salaryIncrementDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_JSON, String.class, ParameterMode.IN)

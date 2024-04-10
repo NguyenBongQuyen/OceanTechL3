@@ -8,6 +8,8 @@ import com.octl3.api.service.ProposalAdviceService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -34,7 +36,8 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @Override
     public ProposalAdviceDto create(ProposalAdviceDto proposalAdviceDto) {
         proposalAdviceDto.setCreateDate(LocalDate.now());
-        // set create by?
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        proposalAdviceDto.setCreateBy(authentication.getName());
         proposalAdviceDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_JSON, String.class, ParameterMode.IN)
@@ -124,5 +127,4 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
             throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }
-
 }
