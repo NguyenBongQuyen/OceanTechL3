@@ -1,4 +1,4 @@
-package com.octl3.api.dto;
+package com.octl3.api.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -6,21 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RelationshipDto {
-    private Integer id;
-    private Integer employeeId;
+public class UserResponseDto {
+    private String username;
+//    private Integer roleId;
     private String name;
-    private LocalDate dateOfBirth;
-    private String gender;
+    private String position;
+    private String email;
     private String phone;
-    private String address;
-    private String citizenId;
-    private String relationship;
 }
+

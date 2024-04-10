@@ -6,21 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RelationshipDto {
+public class RoleDto {
     private Integer id;
-    private Integer employeeId;
     private String name;
-    private LocalDate dateOfBirth;
-    private String gender;
-    private String phone;
-    private String address;
-    private String citizenId;
-    private String relationship;
 }
