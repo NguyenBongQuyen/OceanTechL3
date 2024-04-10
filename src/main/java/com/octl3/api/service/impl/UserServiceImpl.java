@@ -25,6 +25,7 @@ import javax.persistence.StoredProcedureQuery;
 import javax.validation.Valid;
 import java.util.Objects;
 
+import static com.octl3.api.constants.SecurityConst.MANAGER;
 import static com.octl3.api.constants.StoredProcedure.Mapper.USER_RESPONSE_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.USER_JSON;
 import static com.octl3.api.constants.StoredProcedure.User.CREATE_USER;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         if (ObjectUtils.isEmpty(userDto.getRoleId()) || !roleService.isExistRoleById(userDto.getRoleId())) {
-            userDto.setRoleId(1); // set default role
+            userDto.setRoleId(roleService.getRoleByName(MANAGER).getId()); // set default role
         }
 
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_USER, USER_RESPONSE_DTO_MAPPER)

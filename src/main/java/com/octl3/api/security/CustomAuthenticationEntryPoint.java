@@ -18,7 +18,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-//        throw new  CustomAuthenticationException(e.getMessage());
         httpServletResponse.sendRedirect(API_UN_AUTHENTICATION);
     }
 }

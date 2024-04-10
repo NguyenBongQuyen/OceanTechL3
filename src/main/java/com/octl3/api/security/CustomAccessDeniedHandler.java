@@ -24,27 +24,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest httpServletRequest,
                        HttpServletResponse httpServletResponse,
                        AccessDeniedException e) throws IOException, ServletException {
-//        log.info(String.valueOf(httpServletResponse.getStatus()));
-
         httpServletResponse.sendRedirect(API_FORBIDDEN);
-//        if (httpServletResponse.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
-//            throw new OctException(ErrorMessages.UNAUTHORIZED);
-//        } else if (httpServletResponse.getStatus() == HttpServletResponse.SC_FORBIDDEN) {
-//            throw new OctException(ErrorMessages.FORBIDDEN);
-//        }
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            // Set status code 401 (UNAUTHORIZED)
-//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            // Write custom response message for UNAUTHORIZED
-//            httpServletResponse.getWriter().write("Unauthorized: You need to login to access this resource.");
-//        } else {
-//            // Set status code 403 (FORBIDDEN)
-//            httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-//            // Write custom response message for FORBIDDEN
-//            httpServletResponse.getWriter().write("Forbidden: You don't have permission to access this resource.");
-//        }
     }
 }
