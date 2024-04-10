@@ -1,7 +1,5 @@
 package com.octl3.api.security;
 
-import com.octl3.api.commons.exceptions.ErrorMessages;
-import com.octl3.api.commons.exceptions.OctException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.octl3.api.constants.SecurityConst.TOKEN_TYPE;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,18 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // Lấy jwt từ request
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                // Lấy id user từ chuỗi jwt
+
                 String username = tokenProvider.getUsername(jwt);
-                // Lấy thông tin người dùng từ id
-//                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-//                UserDetails userDetails = new CustomUserDetails(userDto);
 
                 if (userDetails != null) {
                     // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
@@ -52,18 +46,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
+//            else {
+//                SecurityContextHolder.clearContext();   // token không hợp lệ thì xóa context (config SessionCreationPolicy.STATELESS thì không cần nữa)
+//            }
+//            log.info(SecurityContextHolder.getContext().toString());
         } catch (Exception ex) {
             log.error("failed on set user authentication", ex);
-            throw new OctException(ErrorMessages.UNAUTHORIZED);
         }
-
         filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        // Kiểm tra xem header Authorization có chứa thông tin jwt không
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_TYPE)) {
             return bearerToken.substring(7);
         }
         return null;

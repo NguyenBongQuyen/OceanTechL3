@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,8 +20,8 @@ public class UserDto {
     private Integer roleId;
     private String name;
     private String position;
+    @Email
     private String email;
     private String phone;
 
 }
-

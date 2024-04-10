@@ -23,5 +23,4 @@ public class RelationshipDto {
     private String address;
     private String citizenId;
     private String relationship;
-
 }

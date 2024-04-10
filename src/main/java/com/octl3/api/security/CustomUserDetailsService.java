@@ -16,9 +16,6 @@ import static com.octl3.api.constants.StoredProcedure.Mapper.USER_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.USERNAME_PARAM;
 import static com.octl3.api.constants.StoredProcedure.User.GET_USER_BY_USERNAME;
 
-
-//Khi người dùng đăng nhập thì Spring Security sẽ cần lấy các thông tin UserDetails hiện có để kiểm tra.
-//Vì vậy, bạn cần tạo ra một class kế thừa lớp UserDetailsService mà Spring Security cung cấp để làm nhiệm vụ này.
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
