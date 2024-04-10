@@ -7,5 +7,12 @@ import lombok.NoArgsConstructor;
 public class MessageConst {
     public static final String SUBMIT_SUCCESS = "Submit success!";
     public static final String DELETE_SUCCESS = "Delete success!";
+    public static final String AGE_NOT_LESS_THAN_18 = "Age not less than 18";
+    public static final String AGE_NOT_OVER_60 = "Age not over 60";
+    public static final String PHONE_WRONG_FORMAT = "The phone number must have 10 or 11 numbers";
+    public static final String EMAIL_WRONG_FORMAT = "Email wrong format";
+    public static final String CITIZEN_ID_WRONG_FORMAT = "Citizen id must have 12 numbers";
+    public static final String DATE_NOT_FUTURE = "Date can not be in the future";
+
 
 }

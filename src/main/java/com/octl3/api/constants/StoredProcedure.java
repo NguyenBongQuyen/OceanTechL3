@@ -118,7 +118,7 @@ public class StoredProcedure {
     public static class ProfileEnd {
         public static final String CREATE = "create_profile_end";
         public static final String GET_BY_ID = "get_profile_end_by_id";
-        public static final String GET_ALL = "get_all_profile_end";
+        public static final String GET_ALL = "get_all_profiles_end";
         public static final String GET_BY_STATUS = "get_profile_end_by_status";
         public static final String UPDATE_BY_MANAGER = "update_profile_end_by_manager";
         public static final String UPDATE_BY_LEADER = "update_profile_end_by_leader";

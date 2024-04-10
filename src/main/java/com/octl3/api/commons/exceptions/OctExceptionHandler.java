@@ -43,4 +43,15 @@ public class OctExceptionHandler {
         return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
     }
 
+    @ExceptionHandler(OctNotFoundException.class)
+    protected ResponseEntity<DataResponse<String>> handleOctNotFoundException(OctNotFoundException ex) {
+        log.info("handleOctNotFoundException");
+        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(OctDuplicateException.class)
+    protected ResponseEntity<DataResponse<String>> handleOctDuplicateException(OctDuplicateException ex) {
+        log.info("handleOctDuplicateException");
+        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
+    }
 }

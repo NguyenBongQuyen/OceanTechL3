@@ -19,8 +19,7 @@ import java.time.LocalDate;
                         @ColumnResult(name = "name", type = String.class),
                         @ColumnResult(name = "field", type = String.class),
                         @ColumnResult(name = "content", type = String.class),
-                        @ColumnResult(name = "start_date", type = LocalDate.class),
-                        @ColumnResult(name = "end_date", type = LocalDate.class)
+                        @ColumnResult(name = "start_date", type = LocalDate.class)
                 }
         )
 )

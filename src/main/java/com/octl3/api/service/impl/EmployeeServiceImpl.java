@@ -80,6 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(int id) {
+        UploadFile.deleteImage(getById(id).getImage());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.DELETE)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
