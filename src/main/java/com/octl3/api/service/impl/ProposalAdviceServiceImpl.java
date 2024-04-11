@@ -6,15 +6,17 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.ProposalAdviceDto;
 import com.octl3.api.service.ProposalAdviceService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,11 +32,13 @@ import static com.octl3.api.constants.StoredProcedure.ProposalAdvice.*;
 public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
 
     @Override
     public ProposalAdviceDto create(ProposalAdviceDto proposalAdviceDto) {
         proposalAdviceDto.setCreateDate(LocalDate.now());
-        // set create by?
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        proposalAdviceDto.setCreateBy(authentication.getName());
         proposalAdviceDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_JSON, String.class, ParameterMode.IN)
@@ -72,6 +76,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByManager(long id, ProposalAdviceDto proposalAdviceDto) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROPOSAL_ADVICE_BY_MANAGER, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id)
@@ -82,6 +87,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         proposalAdviceDto.setStatus(Status.SUBMITTED.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
@@ -94,6 +100,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByLeader(long id, ProposalAdviceDto proposalAdviceDto) {
+        userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (proposalAdviceDto.getStatus().equals(ACCEPTED.getValue())) {
             proposalAdviceDto.setAcceptDate(LocalDate.now());
         }
@@ -109,20 +116,15 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id);
-        int rowEffect;
         try {
-            rowEffect = query.executeUpdate();
+            query.execute();
         } catch (Exception e) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-        if (rowEffect == 0) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
+            throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
-
 }

@@ -6,15 +6,17 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.service.RegistrationService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,11 +31,13 @@ import static com.octl3.api.constants.StoredProcedure.Registration.*;
 public class RegistrationServiceImpl implements RegistrationService {
 
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
 
     @Override
     public RegistrationDto create(RegistrationDto registrationDto) {
         registrationDto.setCreateDate(LocalDate.now());
-        // set create by?
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        registrationDto.setCreateBy(authentication.getName());
         registrationDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
@@ -71,6 +75,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByManager(long id, RegistrationDto registrationDto) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_MANAGER, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id)
@@ -81,7 +86,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void submit(long id, RegistrationDto registrationDto) {
-        registrationDto.setStatus(Status.SUBMITTED.getValue());
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        registrationDto.setStatus(PENDING.getValue());
         registrationDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
@@ -93,6 +99,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
+        userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
         }
@@ -108,19 +115,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id);
-        int rowEffect;
         try {
-            rowEffect = query.executeUpdate();
+            query.execute();
         } catch (Exception e) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-        if (rowEffect == 0) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
+            throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
 

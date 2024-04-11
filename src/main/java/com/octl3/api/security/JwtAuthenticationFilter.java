@@ -38,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (userDetails != null) {
-                    // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
                     UsernamePasswordAuthenticationToken
                             authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -46,10 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-//            else {
-//                SecurityContextHolder.clearContext();   // token không hợp lệ thì xóa context (config SessionCreationPolicy.STATELESS thì không cần nữa)
-//            }
-//            log.info(SecurityContextHolder.getContext().toString());
+
         } catch (Exception ex) {
             log.error("failed on set user authentication", ex);
         }
