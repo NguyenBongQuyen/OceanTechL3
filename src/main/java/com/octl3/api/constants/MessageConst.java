@@ -14,5 +14,15 @@ public class MessageConst {
     public static final String CITIZEN_ID_WRONG_FORMAT = "Citizen id must have 12 numbers";
     public static final String DATE_NOT_FUTURE = "Date can not be in the future";
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Employee {
+        public static final String NOT_FOUND = "Employee not found";
 
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Certificate {
+        public static final String NOT_FOUND = "Certificate not found";
+
+    }
 }

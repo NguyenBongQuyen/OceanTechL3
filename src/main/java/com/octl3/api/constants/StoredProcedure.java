@@ -28,7 +28,7 @@ public class StoredProcedure {
         public static final String RELATIONSHIP_ID_PARAM = "relationship_id_param";
         public static final String PROFILE_END_JSON = "profile_end_data_json";
         public static final String PROFILE_END_ID_PARAM = "profile_end_id_param";
-
+        public static final String RESULT = "result";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -53,6 +53,7 @@ public class StoredProcedure {
         public static final String GET_ALL = "get_all_employees";
         public static final String UPDATE = "update_employee";
         public static final String DELETE = "delete_employee";
+        public static final String EXISTS_BY_ID = "exists_employee_by_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -62,6 +63,7 @@ public class StoredProcedure {
         public static final String GET_BY_EMPLOYEE_ID = "get_certificate_by_employee_id";
         public static final String UPDATE = "update_certificate";
         public static final String DELETE = "delete_certificate";
+        public static final String EXISTS_BY_ID = "exists_certificate_by_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

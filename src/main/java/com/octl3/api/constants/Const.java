@@ -10,5 +10,7 @@ public class Const {
     public static final String PHONE_REGEXP = "^[0-9]{10,11}$";
     public static final String EMAIL_REGEXP = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}";
     public static final String CITIZEN_ID_REGEXP = "^[0-9]{12}$";
+    public static final int EXISTS_EMPLOYEE = 1;
+    public static final int EXISTS_CERTIFICATE = 1;
 
 }

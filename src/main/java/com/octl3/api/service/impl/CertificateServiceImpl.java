@@ -6,6 +6,7 @@ import com.octl3.api.constants.StoredProcedure.Parameter;
 import com.octl3.api.dto.CertificateDto;
 import com.octl3.api.service.CertificateService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.CertificateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificateService {
     private final EntityManager entityManager;
+    private final CertificateValidator certificateValidator;
 
     @Override
     public CertificateDto create(CertificateDto certificateDto) {
@@ -32,6 +34,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public CertificateDto getById(int id) {
+        certificateValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.GET_BY_ID, Mapper.CERTIFICATE_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
@@ -72,6 +75,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public void deleteById(int id) {
+        certificateValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.DELETE)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)

@@ -17,13 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.validation.Valid;
-import java.util.Objects;
 
 import static com.octl3.api.constants.SecurityConst.MANAGER;
 import static com.octl3.api.constants.StoredProcedure.Mapper.USER_RESPONSE_DTO_MAPPER;
