@@ -1,5 +1,7 @@
 package com.octl3.api.service.impl;
 
+import com.octl3.api.commons.exceptions.ErrorMessages;
+import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.dto.TokenResponse;
 import com.octl3.api.dto.user.UserDto;
 import com.octl3.api.dto.user.UserLogin;
@@ -11,6 +13,7 @@ import com.octl3.api.service.UserService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,21 +55,23 @@ public class UserServiceImpl implements UserService {
         return (UserResponseDto) query.getSingleResult();
     }
 
+    @Override
     public TokenResponse login(UserLogin userLogin) {
-        // Xác thực từ username và password.
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userLogin.getUsername(),
-                        userLogin.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLogin.getUsername(),
+                            userLogin.getPassword()
+                    )
+            );
 
-        // Nếu không xảy ra exception tức là thông tin hợp lệ
-        // Set thông tin authentication vào Security Context
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Trả về jwt cho người dùng.
-        String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-        return new TokenResponse(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
+            return new TokenResponse(jwt);
+        } catch (BadCredentialsException exception) {
+            throw new OctException(ErrorMessages.PASSWORD_LOGIN_FAIL);
+        } catch (Exception exception) {
+            throw new OctException(ErrorMessages.USERNAME_LOGIN_FAIL);
+        }
     }
 }

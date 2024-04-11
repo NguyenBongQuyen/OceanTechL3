@@ -29,7 +29,7 @@ public class OctExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<DataResponse<Map<String, String>>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        log.info("handleMethodArgumentNotValid. Msg = {}");
+        log.info("handleMethodArgumentNotValid. Msg = {}", ex.getMessage(), ex);
         Map<String, String> details = new HashMap<>();
         ex.getBindingResult().getAllErrors()
                 .forEach(error -> {
