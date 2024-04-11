@@ -8,13 +8,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.*;
 
@@ -31,7 +28,7 @@ public class OctExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<DataResponse<Map<String, String>>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        log.info("handleMethodArgumentNotValid. Msg = {}");
+        log.info("handleMethodArgumentNotValid. Msg = {}", ex.getMessage(), ex);
         Map<String, String> details = new HashMap<>();
         ex.getBindingResult().getAllErrors()
                 .forEach(error -> {

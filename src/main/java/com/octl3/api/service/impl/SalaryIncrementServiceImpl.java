@@ -6,15 +6,17 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.SalaryIncrementDto;
 import com.octl3.api.service.SalaryIncrementService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,11 +32,13 @@ import static com.octl3.api.constants.StoredProcedure.SalaryIncrement.*;
 public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
 
     @Override
     public SalaryIncrementDto create(SalaryIncrementDto salaryIncrementDto) {
         salaryIncrementDto.setCreateDate(LocalDate.now());
-        // set create by
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        salaryIncrementDto.setCreateBy(authentication.getName());
         salaryIncrementDto.setStatus(Status.CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_JSON, String.class, ParameterMode.IN)
@@ -72,6 +76,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByManager(long id, SalaryIncrementDto salaryIncrementDto) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_SALARY_INCREMENT_BY_MANAGER, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id)
@@ -82,6 +87,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public void submit(long id, SalaryIncrementDto salaryIncrementDto) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         salaryIncrementDto.setStatus(Status.SUBMITTED.getValue());
         salaryIncrementDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
@@ -94,6 +100,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByLeader(long id, SalaryIncrementDto salaryIncrementDto) {
+        userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (salaryIncrementDto.getStatus().equals(ACCEPTED.getValue())) {
             salaryIncrementDto.setAcceptDate(LocalDate.now());
         }
@@ -109,19 +116,15 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id);
-        int rowEffect;
         try {
-            rowEffect = query.executeUpdate();
+            query.execute();
         } catch (Exception e) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-        if (rowEffect == 0) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
+            throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
 
