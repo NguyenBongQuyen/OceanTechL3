@@ -35,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
         try {
             return (RoleDto) query.getSingleResult();
         } catch (NoResultException e) {
-            log.info("not found role by name"); ///////////////////////////////////////
+            log.info(e.getMessage(), e);
             throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }
@@ -57,7 +57,7 @@ public class RoleServiceImpl implements RoleService {
         try {
             return (RoleDto) query.getSingleResult();
         } catch (NoResultException e) {
-            log.info("not found role by id"); ///////////////////////////////////////
+            log.info(e.getMessage(), e);
             throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }

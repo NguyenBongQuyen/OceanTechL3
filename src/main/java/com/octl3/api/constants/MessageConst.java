@@ -8,4 +8,5 @@ public class MessageConst {
     public static final String SUBMIT_SUCCESS = "Submit success!";
     public static final String DELETE_SUCCESS = "Delete success!";
 
+    public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
 }
