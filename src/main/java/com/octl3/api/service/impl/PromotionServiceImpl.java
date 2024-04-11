@@ -4,9 +4,9 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.PromotionDto;
-import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.PromotionService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import static com.octl3.api.constants.StoredProcedure.Promotion.*;
 public class PromotionServiceImpl implements PromotionService {
 
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
 
     @Override
     public PromotionDto create(PromotionDto promotionDto) {
@@ -76,7 +76,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByManager(long id, PromotionDto promotionDto) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROMOTION_BY_MANAGER, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id)
@@ -87,7 +87,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void submit(long id, PromotionDto promotionDto) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         promotionDto.setStatus(Status.SUBMITTED.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROMOTION, PROMOTION_DTO_MAPPER)
@@ -100,7 +100,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByLeader(long id, PromotionDto promotionDto) {
-        checkLeader(id);
+        userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (promotionDto.getStatus().equals(ACCEPTED.getValue())) {
             promotionDto.setAcceptDate(LocalDate.now());
 
@@ -117,35 +117,15 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id);
-        int rowEffect;
         try {
-            rowEffect = query.executeUpdate();
+            query.execute();
         } catch (Exception e) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-        if (rowEffect == 0) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
-        }
-    }
-
-    private void checkCreateBy(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getName().equals(getById(id).getCreateBy())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-    }
-
-    private void checkLeader(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
-        if (!userId.equals(getById(id).getLeaderId())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
+            throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
 

@@ -4,7 +4,8 @@ import com.octl3.api.dto.user.UserDto;
 import com.octl3.api.service.RoleService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,13 +15,13 @@ import java.util.Collections;
 import java.util.Objects;
 
 import static com.octl3.api.constants.SecurityConst.ROLE_PREFIX;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private UserDto userDto;
-    private final RoleService roleService;
+    private transient UserDto userDto;
+    private final transient RoleService roleService;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -4,9 +4,9 @@ import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
 import com.octl3.api.constants.Status;
 import com.octl3.api.dto.ProposalAdviceDto;
-import com.octl3.api.security.CustomUserDetails;
 import com.octl3.api.service.ProposalAdviceService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import static com.octl3.api.constants.StoredProcedure.ProposalAdvice.*;
 public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
 
     @Override
     public ProposalAdviceDto create(ProposalAdviceDto proposalAdviceDto) {
@@ -76,7 +76,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByManager(long id, ProposalAdviceDto proposalAdviceDto) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROPOSAL_ADVICE_BY_MANAGER, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id)
@@ -87,7 +87,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         proposalAdviceDto.setStatus(Status.SUBMITTED.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
@@ -100,7 +100,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByLeader(long id, ProposalAdviceDto proposalAdviceDto) {
-        checkLeader(id);
+        userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (proposalAdviceDto.getStatus().equals(ACCEPTED.getValue())) {
             proposalAdviceDto.setAcceptDate(LocalDate.now());
         }
@@ -116,35 +116,15 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
-        checkCreateBy(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id);
-        int rowEffect;
         try {
-            rowEffect = query.executeUpdate();
+            query.execute();
         } catch (Exception e) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-        if (rowEffect == 0) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
-        }
-    }
-
-    private void checkCreateBy(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.getName().equals(getById(id).getCreateBy())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
-        }
-    }
-
-    private void checkLeader(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();
-        if (!userId.equals(getById(id).getLeaderId())) {
-            throw new OctException(ErrorMessages.NOT_ALLOW);
+            throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
 }

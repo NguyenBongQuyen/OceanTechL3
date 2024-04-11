@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenResponse login(UserLogin userLogin) {
         try {
-            // Xác thực từ username và password.
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userLogin.getUsername(),
@@ -66,10 +65,7 @@ public class UserServiceImpl implements UserService {
                     )
             );
 
-            // Nếu không xảy ra exception tức là thông tin hợp lệ
-            // Set thông tin authentication vào Security Context
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            // Trả về jwt cho người dùng.
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
             return new TokenResponse(jwt);
         } catch (BadCredentialsException exception) {

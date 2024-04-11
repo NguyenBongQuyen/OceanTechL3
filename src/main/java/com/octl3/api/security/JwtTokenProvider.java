@@ -14,29 +14,29 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     @Value("${spring.security.jwt.secret}")
-    private String JWT_SECRET;
+    private String jwtSecret;
 
     @Value("${spring.security.jwt.expiration}")
-    private long JWT_EXPIRATION;
+    private long jwtExpiration;
 
     public String generateToken(CustomUserDetails userDetails) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+        Date expiryDate = new Date(now.getTime() + jwtExpiration);
         return Jwts.builder()
                 .setSubject(userDetails.getUserDto().getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token");
