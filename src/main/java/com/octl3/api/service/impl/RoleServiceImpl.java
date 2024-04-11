@@ -13,8 +13,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 
-import java.math.BigInteger;
-
 import static com.octl3.api.constants.StoredProcedure.Mapper.ROLE_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.ROLE_ID_PARAM;
 import static com.octl3.api.constants.StoredProcedure.Parameter.ROLE_NAME_PARAM;
@@ -45,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(IS_EXIST_ROLE_BY_ID)
                 .registerStoredProcedureParameter(ROLE_ID_PARAM, Integer.class, ParameterMode.IN)
                 .setParameter(ROLE_ID_PARAM, id);
-        BigInteger result = (BigInteger) query.getSingleResult();
+        Number result = (Number) query.getSingleResult();
         return result != null && result.intValue() == 1;
     }
 
