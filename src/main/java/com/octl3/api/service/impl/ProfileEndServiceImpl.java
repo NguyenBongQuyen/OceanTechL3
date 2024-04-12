@@ -7,6 +7,7 @@ import com.octl3.api.constants.StoredProcedure.ProfileEnd;
 import com.octl3.api.dto.ProfileEndDto;
 import com.octl3.api.service.ProfileEndService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.ProfileEndValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileEndServiceImpl implements ProfileEndService {
     private final EntityManager entityManager;
+    private final ProfileEndValidator profileEndValidator;
 
     @Override
     public ProfileEndDto create(ProfileEndDto profileEndDto) {
@@ -34,6 +36,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public ProfileEndDto getById(int id) {
+        profileEndValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.GET_BY_ID, Mapper.PROFILE_END_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
@@ -103,6 +106,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public void deleteById(int id) {
+        profileEndValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.DELETE, Mapper.PROFILE_END_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)

@@ -12,6 +12,7 @@ import com.octl3.api.service.RoleService;
 import com.octl3.api.service.UserService;
 import com.octl3.api.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +31,7 @@ import static com.octl3.api.constants.StoredProcedure.Mapper.USER_RESPONSE_DTO_M
 import static com.octl3.api.constants.StoredProcedure.Parameter.USER_JSON;
 import static com.octl3.api.constants.StoredProcedure.User.CREATE_USER;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {

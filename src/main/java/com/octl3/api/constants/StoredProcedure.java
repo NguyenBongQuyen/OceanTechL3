@@ -73,6 +73,7 @@ public class StoredProcedure {
         public static final String GET_BY_EMPLOYEE_ID = "get_relationship_by_employee_id";
         public static final String UPDATE = "update_relationship";
         public static final String DELETE = "delete_relationship";
+        public static final String EXISTS_BY_ID = "exists_relationship_by_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -133,6 +134,7 @@ public class StoredProcedure {
         public static final String UPDATE_BY_LEADER = "update_profile_end_by_leader";
         public static final String SUBMIT = "submit_profile_end";
         public static final String DELETE = "delete_profile_end";
+        public static final String EXISTS_BY_ID = "exists_profile_end_by_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
