@@ -1,7 +1,6 @@
 package com.octl3.api.validator;
 
 import com.octl3.api.commons.exceptions.OctException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
