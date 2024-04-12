@@ -40,11 +40,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getById(int id) {
+    public EmployeeDto getById(long id) {
         employeeValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.GET_BY_ID, Mapper.EMPLOYEE_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, id);
         return (EmployeeDto) query.getSingleResult();
     }
@@ -66,14 +66,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto update(int id, EmployeeDto employeeDto, MultipartFile fileImage) {
+    public EmployeeDto update(long id, EmployeeDto employeeDto, MultipartFile fileImage) {
         if (!fileImage.isEmpty()) {
             UploadFile.deleteImage(getById(id).getImage());
             employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
         }
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.UPDATE, Mapper.EMPLOYEE_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_JSON, JsonUtil.objectToJson(employeeDto));
@@ -82,12 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         employeeValidator.existsById(id);
         UploadFile.deleteImage(getById(id).getImage());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.DELETE)
-                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, id);
         query.execute();
     }

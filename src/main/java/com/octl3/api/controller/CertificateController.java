@@ -21,23 +21,23 @@ public class CertificateController {
     }
 
     @GetMapping("/{id}")
-    public DataResponse<CertificateDto> getById(@PathVariable("id") int id) {
+    public DataResponse<CertificateDto> getById(@PathVariable("id") long id) {
         return DataResponse.ok(certificateService.getById(id));
     }
 
     @GetMapping
-    public DataResponse<List<CertificateDto>> getByEmployeeId(@RequestParam("employeeId") int employeeId) {
+    public DataResponse<List<CertificateDto>> getByEmployeeId(@RequestParam("employeeId") long employeeId) {
         return DataResponse.ok(certificateService.getByEmployeeId(employeeId));
     }
 
     @PutMapping("/{id}")
-    public DataResponse<CertificateDto> update(@PathVariable("id") int id,
+    public DataResponse<CertificateDto> update(@PathVariable("id") long id,
                                                @RequestBody CertificateDto certificateDto) {
         return DataResponse.ok(certificateService.update(id, certificateDto));
     }
 
     @DeleteMapping("/{id}")
-    public DataResponse<String> deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") long id) {
         certificateService.deleteById(id);
         return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }

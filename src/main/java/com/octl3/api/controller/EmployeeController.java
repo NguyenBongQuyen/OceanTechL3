@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public DataResponse<EmployeeDto> getById(@PathVariable("id") int id) {
+    public DataResponse<EmployeeDto> getById(@PathVariable("id") long id) {
         return DataResponse.ok(employeeService.getById(id));
     }
 
@@ -33,14 +33,14 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<EmployeeDto> update(@PathVariable("id") int id,
+    public DataResponse<EmployeeDto> update(@PathVariable("id") long id,
                                             @RequestPart("employeeDto") EmployeeDto employeeDto,
                                             @RequestPart("fileImage") MultipartFile fileImage) {
         return DataResponse.ok(employeeService.update(id, employeeDto, fileImage));
     }
 
     @DeleteMapping("/{id}")
-    public DataResponse<String> deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") long id) {
         employeeService.deleteById(id);
         return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }

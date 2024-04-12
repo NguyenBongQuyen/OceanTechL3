@@ -14,8 +14,8 @@ import java.time.LocalDate;
         classes = @ConstructorResult(
                 targetClass = RelationshipDto.class,
                 columns = {
-                        @ColumnResult(name = "relationship_id", type = Integer.class),
-                        @ColumnResult(name = "employee_id", type = Integer.class),
+                        @ColumnResult(name = "relationship_id", type = Long.class),
+                        @ColumnResult(name = "employee_id", type = Long.class),
                         @ColumnResult(name = "name", type = String.class),
                         @ColumnResult(name = "date_of_birth", type = LocalDate.class),
                         @ColumnResult(name = "gender", type = String.class),

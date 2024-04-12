@@ -35,11 +35,11 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
-    public ProfileEndDto getById(int id) {
+    public ProfileEndDto getById(long id) {
         profileEndValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.GET_BY_ID, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id);
         return (ProfileEndDto) query.getSingleResult();
 
@@ -64,10 +64,10 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
-    public ProfileEndDto updateByManager(int id, ProfileEndDto profileEndDto) {
+    public ProfileEndDto updateByManager(long id, ProfileEndDto profileEndDto) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.UPDATE_BY_MANAGER, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
@@ -75,7 +75,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
-    public ProfileEndDto updateByLeader(int id, ProfileEndDto profileEndDto) {
+    public ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto) {
         if (profileEndDto.getStatus().equals(Status.ACCEPTED.getValue())) {
             profileEndDto.setAcceptDate(LocalDate.now());
         }
@@ -84,7 +84,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
         }
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.UPDATE_BY_LEADER, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
@@ -92,12 +92,12 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
-    public void submit(int id, ProfileEndDto profileEndDto) {
+    public void submit(long id, ProfileEndDto profileEndDto) {
         profileEndDto.setStatus(Status.PENDING.getValue());
         profileEndDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.SUBMIT, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
@@ -105,11 +105,11 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         profileEndValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.DELETE, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_ID_PARAM, id);
         query.execute();
     }

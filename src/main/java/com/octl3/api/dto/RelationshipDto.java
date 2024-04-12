@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RelationshipDto {
-    private Integer id;
-    private Integer employeeId;
+    private Long id;
+    private Long employeeId;
     private String name;
     private LocalDate dateOfBirth;
     private String gender;

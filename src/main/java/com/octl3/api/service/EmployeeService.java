@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface EmployeeService {
     EmployeeDto create(EmployeeDto employeeDto, MultipartFile fileImage);
-    EmployeeDto getById(int id);
+    EmployeeDto getById(long id);
     List<EmployeeDto> getAll();
-    EmployeeDto update(int id, EmployeeDto employeeDto, MultipartFile file);
-    void deleteById(int id);
+    EmployeeDto update(long id, EmployeeDto employeeDto, MultipartFile file);
+    void deleteById(long id);
 }

@@ -15,32 +15,6 @@ public class MessageConst {
 
     public static final String AGE_NOT_LESS_THAN_18 = "Age not less than 18";
     public static final String AGE_NOT_OVER_60 = "Age not over 60";
-    public static final String PHONE_WRONG_FORMAT = "The phone number must have 10 or 11 numbers";
-    public static final String EMAIL_WRONG_FORMAT = "Email wrong format";
     public static final String CITIZEN_ID_WRONG_FORMAT = "Citizen id must have 12 numbers";
-    public static final String DATE_NOT_FUTURE = "Date can not be in the future";
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Employee {
-        public static final String NOT_FOUND = "Employee not found";
-
-    }
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Certificate {
-        public static final String NOT_FOUND = "Certificate not found";
-
-    }
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Relationship {
-        public static final String NOT_FOUND = "Relationship not found";
-
-    }
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class ProfileEnd {
-        public static final String NOT_FOUND = "Profile end not found";
-
-    }
 }

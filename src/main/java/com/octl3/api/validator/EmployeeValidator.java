@@ -1,6 +1,15 @@
 package com.octl3.api.validator;
 
+<<<<<<<HEAD
 import com.octl3.api.commons.exceptions.OctException;
+=======
+import com.octl3.api.commons.exceptions.ErrorMessages;
+import com.octl3.api.commons.exceptions.OctException;
+import com.octl3.api.constants.Const;
+import com.octl3.api.constants.StoredProcedure.Employee;
+import com.octl3.api.constants.StoredProcedure.Mapper;
+import com.octl3.api.constants.StoredProcedure.Parameter;
+>>>>>>>thao
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -21,10 +30,9 @@ public class EmployeeValidator {
     private final EntityManager entityManager;
 
     public void existsById(long id) {
-        StoredProcedureQuery query =
-                entityManager.createStoredProcedureQuery(EXISTS_BY_ID, EMPLOYEE_DTO_MAPPER)
-                        .registerStoredProcedureParameter(EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
-                        .setParameter(EMPLOYEE_ID_PARAM, id);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(EXISTS_BY_ID)
+                .registerStoredProcedureParameter(EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
+                .setParameter(EMPLOYEE_ID_PARAM, id);
         Number result = (Number) query.getSingleResult();
         if (ObjectUtils.isEmpty(result) && result.intValue() != EXISTS_VALUE) {
             throw new OctException(NOT_FOUND_LEADER_ID);
