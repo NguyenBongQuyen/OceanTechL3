@@ -20,6 +20,7 @@ public enum ErrorMessages implements ErrorMessage {
     NOT_ALLOW(403_001, "Not allow access this resource"),
     NOT_FOUND(404, "Resource not found"),
     NOT_FOUND_LEADER_ID(404_001, "Leader Id not found"),
+    NOT_FOUND_EMPLOYEE_ID(404_002, "Leader Id not found"),
     DUPLICATE_DATA(405, "Data duplicate"),
     DUPLICATE_USERNAME(405_001, "Username duplicate"),
     DUPLICATE_EMAIL(405_002, "Email duplicate"),
