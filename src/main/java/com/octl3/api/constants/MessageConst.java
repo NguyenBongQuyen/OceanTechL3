@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 public class MessageConst {
     public static final String SUBMIT_SUCCESS = "Submit success!";
     public static final String DELETE_SUCCESS = "Delete success!";
-
     public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
+    public static final String INVALID_PASSWORD_FORMAT = "Invalid password format";
+    public static final String INVALID_USERNAME_FORMAT = "Invalid username format";
 }

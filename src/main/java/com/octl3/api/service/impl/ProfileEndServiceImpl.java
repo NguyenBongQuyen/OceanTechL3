@@ -90,7 +90,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public void submit(int id, ProfileEndDto profileEndDto) {
-        profileEndDto.setStatus(Status.SUBMITTED.getValue());
+        profileEndDto.setStatus(Status.PENDING.getValue());
         profileEndDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.SUBMIT, Mapper.PROFILE_END_DTO_MAPPER)

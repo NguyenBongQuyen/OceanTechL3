@@ -6,7 +6,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import static com.octl3.api.constants.Const.USERNAME_REGEX;
-import static com.octl3.api.constants.Const.USERNAME_REGEX;
 
 public class UsernameValidator implements ConstraintValidator<Username, String> {
     @Override

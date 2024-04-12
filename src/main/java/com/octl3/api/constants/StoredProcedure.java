@@ -9,6 +9,7 @@ public class StoredProcedure {
     public static class Parameter {
         public static final String USER_JSON = "user_data_json";
         public static final String USERNAME_PARAM = "username_param";
+        public static final String EMAIL_PARAM = "email_param";
         public static final String ROLE_NAME_PARAM = "role_name_param";
         public static final String ROLE_ID_PARAM = "role_id_param";
         public static final String REGISTRATION_JSON = "registration_data_json";
@@ -140,8 +141,8 @@ public class StoredProcedure {
         public static final String GET_ROLE_BY_NAME = "get_role_by_name";
         public static final String GET_ROLE_BY_ID = "get_role_by_id";
         public static final String IS_EXIST_ROLE_BY_ID = "is_exist_role_by_id";
-
-
+        public static final String IS_EXIST_USERNAME = "is_exist_username";
+        public static final String IS_EXIST_EMAIL = "is_exist_email";
 
     }
 

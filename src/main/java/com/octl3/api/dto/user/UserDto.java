@@ -1,6 +1,7 @@
 package com.octl3.api.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.octl3.api.validator.anotations.Password;
 import com.octl3.api.validator.anotations.Phone;
 import com.octl3.api.validator.anotations.Username;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class UserDto {
     private Long id;
     @Username
     private String username;
+    @Password
     private String password;
     private Integer roleId;
     private String name;
