@@ -88,7 +88,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @Override
     public void submit(long id, SalaryIncrementDto salaryIncrementDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
-        salaryIncrementDto.setStatus(Status.SUBMITTED.getValue());
+        salaryIncrementDto.setStatus(Status.PENDING.getValue());
         salaryIncrementDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)

@@ -88,7 +88,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
-        proposalAdviceDto.setStatus(Status.SUBMITTED.getValue());
+        proposalAdviceDto.setStatus(Status.PENDING.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)

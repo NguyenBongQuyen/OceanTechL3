@@ -88,7 +88,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public void submit(long id, PromotionDto promotionDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
-        promotionDto.setStatus(Status.SUBMITTED.getValue());
+        promotionDto.setStatus(Status.PENDING.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)

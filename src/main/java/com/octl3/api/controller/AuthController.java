@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public DataResponse<TokenResponse> login(@Valid @RequestBody UserLogin userLogin) {
+    public DataResponse<TokenResponse> login(@RequestBody UserLogin userLogin) {
         return DataResponse.ok(userService.login(userLogin));
     }
     

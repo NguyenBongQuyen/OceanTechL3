@@ -19,6 +19,8 @@ public enum ErrorMessages implements ErrorMessage {
     NOT_ALLOW(403_001, "Not allow access this resource"),
     NOT_FOUND(404, "Resource not found"),
     DUPLICATE_DATA(405, "Data duplicate"),
+    DUPLICATE_USERNAME(405_001, "Username duplicate"),
+    DUPLICATE_EMAIL(405_002, "Email duplicate"),
     FILE_UPLOAD_ERROR(406, "File upload error"),
     FILE_DELETE_ERROR(407, "File delete error");
 
