@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface RelationshipService {
     RelationshipDto create(RelationshipDto relationshipDto);
-    RelationshipDto getById(int id);
-    List<RelationshipDto> getByEmployeeId(int employeeId);
-    RelationshipDto update(int id, RelationshipDto relationshipDto);
-    void deleteById(int id);
+    RelationshipDto getById(long id);
+    List<RelationshipDto> getByEmployeeId(long employeeId);
+    RelationshipDto update(long id, RelationshipDto relationshipDto);
+    void deleteById(long id);
 }

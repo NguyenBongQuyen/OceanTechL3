@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface CertificateService {
     CertificateDto create(CertificateDto certificateDto);
-    CertificateDto getById(int id);
-    List<CertificateDto> getByEmployeeId(int employeeId);
-    CertificateDto update(int id, CertificateDto certificateDto);
-    void deleteById(int id);
+    CertificateDto getById(long id);
+    List<CertificateDto> getByEmployeeId(long employeeId);
+    CertificateDto update(long id, CertificateDto certificateDto);
+    void deleteById(long id);
 }
