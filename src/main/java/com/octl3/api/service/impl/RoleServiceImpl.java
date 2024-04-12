@@ -7,6 +7,7 @@ import com.octl3.api.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -44,7 +45,7 @@ public class RoleServiceImpl implements RoleService {
                 .registerStoredProcedureParameter(ROLE_ID_PARAM, Integer.class, ParameterMode.IN)
                 .setParameter(ROLE_ID_PARAM, id);
         Number result = (Number) query.getSingleResult();
-        return result != null && result.intValue() == 1;
+        return !ObjectUtils.isEmpty(result) && result.intValue() == 1;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.octl3.api.security.JwtTokenProvider;
 import com.octl3.api.service.RoleService;
 import com.octl3.api.service.UserService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,12 +42,13 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final UserValidator userValidator;
 
 
     @Override
     public UserResponseDto saveUser(UserDto userDto) {
+        userValidator.checkUserRegister(userDto);
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
         if (ObjectUtils.isEmpty(userDto.getRoleId()) || !roleService.isExistRoleById(userDto.getRoleId())) {
             userDto.setRoleId(roleService.getRoleByName(MANAGER).getId()); // set default role
         }
