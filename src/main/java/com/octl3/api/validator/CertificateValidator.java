@@ -26,7 +26,8 @@ public class CertificateValidator {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.EXISTS_BY_ID, Mapper.CERTIFICATE_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
-                        .setParameter(Parameter.CERTIFICATE_ID_PARAM, id);
+                        .setParameter(Parameter.CERTIFICATE_ID_PARAM, id)
+                        .registerStoredProcedureParameter(Parameter.RESULT, Integer.class, ParameterMode.OUT);
         Integer result = (Integer) query.getOutputParameterValue(Parameter.RESULT);
         if (result != Const.EXISTS_CERTIFICATE) {
             ApiSubError apiSubError = new ApiValidatorError(FieldName.CERTIFICATE_ID, id, MessageConst.Certificate.NOT_FOUND);

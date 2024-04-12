@@ -25,4 +25,16 @@ public class MessageConst {
         public static final String NOT_FOUND = "Certificate not found";
 
     }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Relationship {
+        public static final String NOT_FOUND = "Relationship not found";
+
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ProfileEnd {
+        public static final String NOT_FOUND = "Profile end not found";
+
+    }
 }

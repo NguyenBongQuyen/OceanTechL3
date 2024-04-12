@@ -12,5 +12,7 @@ public class Const {
     public static final String CITIZEN_ID_REGEXP = "^[0-9]{12}$";
     public static final int EXISTS_EMPLOYEE = 1;
     public static final int EXISTS_CERTIFICATE = 1;
+    public static final int EXISTS_RELATIONSHIP = 1;
+    public static final int EXISTS_PROFILE_END = 1;
 
 }
