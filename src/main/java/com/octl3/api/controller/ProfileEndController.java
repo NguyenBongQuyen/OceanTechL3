@@ -21,7 +21,7 @@ public class ProfileEndController {
     }
 
     @GetMapping("/{id}")
-    public DataResponse<ProfileEndDto> getById(@PathVariable("id") int id) {
+    public DataResponse<ProfileEndDto> getById(@PathVariable("id") long id) {
         return DataResponse.ok(profileEndService.getById(id));
     }
 
@@ -36,26 +36,26 @@ public class ProfileEndController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<ProfileEndDto> updateByManager(@PathVariable("id") int id,
+    public DataResponse<ProfileEndDto> updateByManager(@PathVariable("id") long id,
                                                        @RequestBody ProfileEndDto profileEndDto) {
         return DataResponse.ok(profileEndService.updateByManager(id, profileEndDto));
     }
 
     @PutMapping("/leader/{id}")
-    public DataResponse<ProfileEndDto> updateByLeader(@PathVariable("id") int id,
+    public DataResponse<ProfileEndDto> updateByLeader(@PathVariable("id") long id,
                                                       @RequestBody ProfileEndDto profileEndDto) {
         return DataResponse.ok(profileEndService.updateByLeader(id, profileEndDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") int id,
+    public DataResponse<String> submit(@PathVariable("id") long id,
                                        @RequestBody ProfileEndDto profileEndDto) {
         profileEndService.submit(id, profileEndDto);
         return DataResponse.ok(MessageConst.SUBMIT_SUCCESS);
     }
 
     @DeleteMapping("/{id}")
-    public DataResponse<String> deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") long id) {
         profileEndService.deleteById(id);
         return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }

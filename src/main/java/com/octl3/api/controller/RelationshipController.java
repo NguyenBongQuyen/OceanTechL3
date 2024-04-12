@@ -21,23 +21,23 @@ public class RelationshipController {
     }
 
     @GetMapping("/{id}")
-    public DataResponse<RelationshipDto> getById(@PathVariable("id") int id) {
+    public DataResponse<RelationshipDto> getById(@PathVariable("id") long id) {
         return DataResponse.ok(relationshipService.getById(id));
     }
 
     @GetMapping
-    public DataResponse<List<RelationshipDto>> getByEmployeeId(@RequestParam("employeeId") int employeeId) {
+    public DataResponse<List<RelationshipDto>> getByEmployeeId(@RequestParam("employeeId") long employeeId) {
         return DataResponse.ok(relationshipService.getByEmployeeId(employeeId));
     }
 
     @PutMapping("/{id}")
-    public DataResponse<RelationshipDto> update(@PathVariable("id") int id,
+    public DataResponse<RelationshipDto> update(@PathVariable("id") long id,
                                                 @RequestBody RelationshipDto relationshipDto) {
         return DataResponse.ok(relationshipService.update(id, relationshipDto));
     }
 
     @DeleteMapping("/{id}")
-    public DataResponse<String> deleteById(@PathVariable("id") int id) {
+    public DataResponse<String> deleteById(@PathVariable("id") long id) {
         relationshipService.deleteById(id);
         return DataResponse.ok(MessageConst.DELETE_SUCCESS);
     }

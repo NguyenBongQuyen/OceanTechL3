@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ProfileEndService {
     ProfileEndDto create(ProfileEndDto profileEndDto);
-    ProfileEndDto getById(int id);
+    ProfileEndDto getById(long id);
     List<ProfileEndDto> getAll();
     List<ProfileEndDto> getByStatus(String status);
-    ProfileEndDto updateByManager(int id, ProfileEndDto profileEndDto);
-    ProfileEndDto updateByLeader(int id, ProfileEndDto profileEndDto);
-    void submit(int id, ProfileEndDto profileEndDto);
-    void deleteById(int id);
+    ProfileEndDto updateByManager(long id, ProfileEndDto profileEndDto);
+    ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto);
+    void submit(long id, ProfileEndDto profileEndDto);
+    void deleteById(long id);
 }

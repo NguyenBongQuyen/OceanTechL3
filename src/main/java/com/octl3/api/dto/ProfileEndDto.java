@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfileEndDto {
-    private Integer id;
-    private Integer registrationId;
-    private Integer leaderId;
+    private Long id;
+    private Long registrationId;
+    private Long leaderId;
     private LocalDate endDate;
     private String endBy;
     private String reason;
@@ -25,6 +25,6 @@ public class ProfileEndDto {
     private LocalDate rejectDate;
     private String rejectReason;
     private LocalDate acceptDate;
-    private Integer storageNumber;
+    private Long storageNumber;
 
 }

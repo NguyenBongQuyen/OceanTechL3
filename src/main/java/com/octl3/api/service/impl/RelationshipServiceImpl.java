@@ -32,30 +32,30 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
-    public RelationshipDto getById(int id) {
+    public RelationshipDto getById(long id) {
         relationshipValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.GET_BY_ID, Mapper.RELATIONSHIP_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id);
         return (RelationshipDto) query.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<RelationshipDto> getByEmployeeId(int employeeId) {
+    public List<RelationshipDto> getByEmployeeId(long employeeId) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.GET_BY_EMPLOYEE_ID, Mapper.RELATIONSHIP_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, employeeId);
         return query.getResultList();
     }
 
     @Override
-    public RelationshipDto update(int id, RelationshipDto relationshipDto) {
+    public RelationshipDto update(long id, RelationshipDto relationshipDto) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.UPDATE, Mapper.RELATIONSHIP_DTO_MAPPER)
-                .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.RELATIONSHIP_JSON, JsonUtil.objectToJson(relationshipDto));
@@ -64,11 +64,11 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         relationshipValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.DELETE)
-                .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id);
         query.execute();
     }

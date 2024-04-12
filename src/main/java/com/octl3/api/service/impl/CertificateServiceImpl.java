@@ -33,20 +33,20 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public CertificateDto getById(int id) {
+    public CertificateDto getById(long id) {
         certificateValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.GET_BY_ID, Mapper.CERTIFICATE_DTO_MAPPER)
-                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_ID_PARAM, id);
         return (CertificateDto) query.getSingleResult();
     }
 
     @Override
-    public List<CertificateDto> getByEmployeeId(int employeeId) {
+    public List<CertificateDto> getByEmployeeId(long employeeId) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.GET_BY_EMPLOYEE_ID, Mapper.CERTIFICATE_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, employeeId);
         return castResultListToListCertificateDto(query.getResultList());
     }
@@ -62,10 +62,10 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public CertificateDto update(int id, CertificateDto certificateDto) {
+    public CertificateDto update(long id, CertificateDto certificateDto) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.UPDATE, Mapper.CERTIFICATE_DTO_MAPPER)
-                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_ID_PARAM, id)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_JSON, JsonUtil.objectToJson(certificateDto));
@@ -74,11 +74,11 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         certificateValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.DELETE)
-                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_ID_PARAM, id);
         query.execute();
     }

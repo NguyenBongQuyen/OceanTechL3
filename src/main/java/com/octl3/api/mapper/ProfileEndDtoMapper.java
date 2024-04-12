@@ -14,9 +14,9 @@ import java.time.LocalDate;
         classes = @ConstructorResult(
                 targetClass = ProfileEndDto.class,
                 columns = {
-                        @ColumnResult(name = "profile_end_id", type = Integer.class),
-                        @ColumnResult(name = "registration_id", type = Integer.class),
-                        @ColumnResult(name = "leader_id", type = Integer.class),
+                        @ColumnResult(name = "profile_end_id", type = Long.class),
+                        @ColumnResult(name = "registration_id", type = Long.class),
+                        @ColumnResult(name = "leader_id", type = Long.class),
                         @ColumnResult(name = "end_date", type = LocalDate.class),
                         @ColumnResult(name = "end_by", type = String.class),
                         @ColumnResult(name = "reason", type = String.class),
@@ -25,7 +25,7 @@ import java.time.LocalDate;
                         @ColumnResult(name = "reject_date", type = LocalDate.class),
                         @ColumnResult(name = "reject_reason", type = String.class),
                         @ColumnResult(name = "accept_date", type = LocalDate.class),
-                        @ColumnResult(name = "storage_number", type = Integer.class)
+                        @ColumnResult(name = "storage_number", type = Long.class)
                 }
         )
 )
