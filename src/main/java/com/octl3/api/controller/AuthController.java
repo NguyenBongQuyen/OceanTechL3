@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.octl3.api.constants.SecurityConst.NOT_ALLOW;
-import static com.octl3.api.constants.SecurityConst.UN_AUTHENTICATION;
+import static com.octl3.api.constants.MessageConst.UN_AUTHENTICATION;
+import static com.octl3.api.constants.MessageConst.UN_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,10 +31,10 @@ public class AuthController {
     public DataResponse<TokenResponse> login(@RequestBody UserLogin userLogin) {
         return DataResponse.ok(userService.login(userLogin));
     }
-    
+
     @GetMapping("/not-allow")
     public DataResponse<String> notAllow() {
-        return DataResponse.build(NOT_ALLOW, ErrorMessages.FORBIDDEN);
+        return DataResponse.build(UN_AUTHORIZATION, ErrorMessages.FORBIDDEN);
     }
 
     @GetMapping("/un-authentication")

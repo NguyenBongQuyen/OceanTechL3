@@ -17,13 +17,5 @@ public class ProfileEndValidator {
     private final EntityManager entityManager;
 
     public void existsById(long id) {
-        StoredProcedureQuery query =
-                entityManager.createStoredProcedureQuery(StoredProcedure.ProfileEnd.EXISTS_BY_ID, StoredProcedure.Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(StoredProcedure.Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
-                        .setParameter(StoredProcedure.Parameter.PROFILE_END_ID_PARAM, id);
-        Number result = (Number) query.getSingleResult();
-        if (result.intValue() != Const.EXISTS_VALUE) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
-        }
-    }
+
 }

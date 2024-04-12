@@ -19,14 +19,5 @@ public class RelationshipValidator {
     private final EntityManager entityManager;
 
     public void existsById(long id) {
-        StoredProcedureQuery query =
-                entityManager.createStoredProcedureQuery(Relationship.EXISTS_BY_ID, Mapper.RELATIONSHIP_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)
-                        .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id);
-        Number result = (Number) query.getSingleResult();
-        if (result.intValue() != Const.EXISTS_VALUE) {
-            throw new OctException(ErrorMessages.NOT_FOUND);
-        }
-    }
 
 }

@@ -6,6 +6,8 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.ProposalAdviceDto;
 import com.octl3.api.service.ProposalAdviceService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.EmployeeValidator;
+import com.octl3.api.validator.StatusValidator;
 import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,7 @@ import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.octl3.api.constants.Status.ACCEPTED;
-import static com.octl3.api.constants.Status.REJECTED;
+import static com.octl3.api.constants.Status.*;
 import static com.octl3.api.constants.StoredProcedure.Mapper.PROPOSAL_ADVICE_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.ProposalAdvice.*;
@@ -33,9 +34,12 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     private final EntityManager entityManager;
     private final UserValidator userValidator;
+    private final StatusValidator statusValidator;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public ProposalAdviceDto create(ProposalAdviceDto proposalAdviceDto) {
+        employeeValidator.existsById(proposalAdviceDto.getEmployeeId());
         proposalAdviceDto.setCreateDate(LocalDate.now());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         proposalAdviceDto.setCreateBy(authentication.getName());
@@ -68,6 +72,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @SuppressWarnings("unchecked")
     @Override
     public List<ProposalAdviceDto> getByStatus(String status) {
+        statusValidator.checkValidStatus(status);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_PROPOSAL_ADVICE_BY_STATUS, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(STATUS_PARAM, String.class, ParameterMode.IN)
                 .setParameter(STATUS_PARAM, status);
@@ -77,6 +82,8 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @Override
     public ProposalAdviceDto updateByManager(long id, ProposalAdviceDto proposalAdviceDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        employeeValidator.existsById(proposalAdviceDto.getEmployeeId());
+        proposalAdviceDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROPOSAL_ADVICE_BY_MANAGER, PROPOSAL_ADVICE_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROPOSAL_ADVICE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROPOSAL_ADVICE_ID_PARAM, id)
@@ -88,6 +95,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkExistLeaderId(proposalAdviceDto.getLeaderId());
         proposalAdviceDto.setStatus(Status.PENDING.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROPOSAL_ADVICE, PROPOSAL_ADVICE_DTO_MAPPER)
@@ -100,6 +108,7 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByLeader(long id, ProposalAdviceDto proposalAdviceDto) {
+        statusValidator.checkValidLeaderStatus(proposalAdviceDto.getStatus());
         userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (proposalAdviceDto.getStatus().equals(ACCEPTED.getValue())) {
             proposalAdviceDto.setAcceptDate(LocalDate.now());

@@ -6,6 +6,8 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.SalaryIncrementDto;
 import com.octl3.api.service.SalaryIncrementService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.EmployeeValidator;
+import com.octl3.api.validator.StatusValidator;
 import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,7 @@ import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.octl3.api.constants.Status.ACCEPTED;
-import static com.octl3.api.constants.Status.REJECTED;
+import static com.octl3.api.constants.Status.*;
 import static com.octl3.api.constants.StoredProcedure.Mapper.SALARY_INCREMENT_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.SalaryIncrement.*;
@@ -33,9 +34,12 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     private final EntityManager entityManager;
     private final UserValidator userValidator;
+    private final StatusValidator statusValidator;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public SalaryIncrementDto create(SalaryIncrementDto salaryIncrementDto) {
+        employeeValidator.existsById(salaryIncrementDto.getEmployeeId());
         salaryIncrementDto.setCreateDate(LocalDate.now());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         salaryIncrementDto.setCreateBy(authentication.getName());
@@ -68,6 +72,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @SuppressWarnings("unchecked")
     @Override
     public List<SalaryIncrementDto> getByStatus(String status) {
+        statusValidator.checkValidStatus(status);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_SALARY_INCREMENT_BY_STATUS, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(STATUS_PARAM, String.class, ParameterMode.IN)
                 .setParameter(STATUS_PARAM, status);
@@ -77,6 +82,8 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @Override
     public SalaryIncrementDto updateByManager(long id, SalaryIncrementDto salaryIncrementDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        employeeValidator.existsById(salaryIncrementDto.getEmployeeId());
+        salaryIncrementDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_SALARY_INCREMENT_BY_MANAGER, SALARY_INCREMENT_DTO_MAPPER)
                 .registerStoredProcedureParameter(SALARY_INCREMENT_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(SALARY_INCREMENT_ID_PARAM, id)
@@ -88,6 +95,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
     @Override
     public void submit(long id, SalaryIncrementDto salaryIncrementDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkExistLeaderId(salaryIncrementDto.getLeaderId());
         salaryIncrementDto.setStatus(Status.PENDING.getValue());
         salaryIncrementDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_SALARY_INCREMENT, SALARY_INCREMENT_DTO_MAPPER)
@@ -100,6 +108,7 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByLeader(long id, SalaryIncrementDto salaryIncrementDto) {
+        statusValidator.checkValidLeaderStatus(salaryIncrementDto.getStatus());
         userValidator.checkIsForLeader(getById(id).getLeaderId());
         if (salaryIncrementDto.getStatus().equals(ACCEPTED.getValue())) {
             salaryIncrementDto.setAcceptDate(LocalDate.now());
