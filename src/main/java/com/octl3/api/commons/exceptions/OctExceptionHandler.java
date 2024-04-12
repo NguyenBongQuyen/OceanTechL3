@@ -13,7 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -42,6 +43,18 @@ public class OctExceptionHandler {
     @ExceptionHandler(OctException.class)
     protected ResponseEntity<DataResponse<String>> handleOctException(OctException ex) {
         log.info("handleOctException. Msg = {}", ex.getErrMsg().getMessage(), ex);
+        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(OctNotFoundException.class)
+    protected ResponseEntity<DataResponse<String>> handleOctNotFoundException(OctNotFoundException ex) {
+        log.info("handleOctNotFoundException");
+        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(OctDuplicateException.class)
+    protected ResponseEntity<DataResponse<String>> handleOctDuplicateException(OctDuplicateException ex) {
+        log.info("handleOctDuplicateException");
         return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
     }
 

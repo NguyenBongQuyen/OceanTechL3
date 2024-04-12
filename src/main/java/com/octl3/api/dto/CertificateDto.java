@@ -20,6 +20,5 @@ public class CertificateDto {
     private String field;
     private String content;
     private LocalDate startDate;
-    private LocalDate endDate;
 
 }

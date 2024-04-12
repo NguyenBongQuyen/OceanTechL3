@@ -55,7 +55,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     public List<ProfileEndDto> getByStatus(String status) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.GET_BY_STATUS, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.STATUS_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.STATUS_PARAM, String.class, ParameterMode.IN)
                         .setParameter(Parameter.STATUS_PARAM, status);
         return query.getResultList();
     }
@@ -73,7 +73,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public ProfileEndDto updateByLeader(int id, ProfileEndDto profileEndDto) {
-        if (profileEndDto.getStatus().equals(Status.CREATED.getValue())) {
+        if (profileEndDto.getStatus().equals(Status.ACCEPTED.getValue())) {
             profileEndDto.setAcceptDate(LocalDate.now());
         }
         if (profileEndDto.getStatus().equals(Status.REJECTED.getValue())) {
