@@ -7,6 +7,7 @@ import com.octl3.api.dto.EmployeeDto;
 import com.octl3.api.service.EmployeeService;
 import com.octl3.api.utils.JsonUtil;
 import com.octl3.api.utils.UploadFile;
+import com.octl3.api.validator.EmployeeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import static com.octl3.api.constants.FileConst.EMPLOYEE_IMAGE_PREFIX;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EntityManager entityManager;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public EmployeeDto create(EmployeeDto employeeDto, MultipartFile fileImage) {
@@ -39,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getById(int id) {
+        employeeValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.GET_BY_ID, Mapper.EMPLOYEE_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Integer.class, ParameterMode.IN)
@@ -80,6 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(int id) {
+        employeeValidator.existsById(id);
         UploadFile.deleteImage(getById(id).getImage());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.DELETE)

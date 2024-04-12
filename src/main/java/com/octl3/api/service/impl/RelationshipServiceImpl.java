@@ -6,6 +6,7 @@ import com.octl3.api.constants.StoredProcedure.Relationship;
 import com.octl3.api.dto.RelationshipDto;
 import com.octl3.api.service.RelationshipService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.RelationshipValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RelationshipServiceImpl implements RelationshipService {
     private final EntityManager entityManager;
+    private final RelationshipValidator relationshipValidator;
 
     @Override
     public RelationshipDto create(RelationshipDto relationshipDto) {
@@ -31,6 +33,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public RelationshipDto getById(int id) {
+        relationshipValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.GET_BY_ID, Mapper.RELATIONSHIP_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
@@ -62,6 +65,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public void deleteById(int id) {
+        relationshipValidator.existsById(id);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.DELETE)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
