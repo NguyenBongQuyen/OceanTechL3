@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 
+import static com.octl3.api.constants.Const.EXISTS_VALUE;
 import static com.octl3.api.constants.StoredProcedure.Mapper.ROLE_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.ROLE_ID_PARAM;
 import static com.octl3.api.constants.StoredProcedure.Parameter.ROLE_NAME_PARAM;
@@ -45,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
                 .registerStoredProcedureParameter(ROLE_ID_PARAM, Integer.class, ParameterMode.IN)
                 .setParameter(ROLE_ID_PARAM, id);
         Number result = (Number) query.getSingleResult();
-        return !ObjectUtils.isEmpty(result) && result.intValue() == 1;
+        return !ObjectUtils.isEmpty(result) && result.intValue() == EXISTS_VALUE;
     }
 
     @Override

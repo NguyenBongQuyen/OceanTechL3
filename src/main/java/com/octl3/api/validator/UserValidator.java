@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 
+import static com.octl3.api.constants.Const.EXISTS_VALUE;
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.User.*;
 
@@ -38,6 +39,16 @@ public class UserValidator {
         }
     }
 
+    public void checkExistLeaderId(long leaderId) {
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(IS_EXIST_LEADER_ID)
+                .registerStoredProcedureParameter(USER_ID_PARAM, Long.class, ParameterMode.IN)
+                .setParameter(USER_ID_PARAM, leaderId);
+        Number result = (Number) query.getSingleResult();
+        if (ObjectUtils.isEmpty(result) || result.intValue() != EXISTS_VALUE) {
+            throw new OctException(ErrorMessages.NOT_FOUND_LEADER_ID);
+        }
+    }
+
     public void checkUserRegister(UserDto userDto) {
         if (isExistUsername(userDto.getUsername())) {
             throw new OctException(ErrorMessages.DUPLICATE_USERNAME);
@@ -49,17 +60,18 @@ public class UserValidator {
 
     private boolean isExistUsername(String username) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(IS_EXIST_USERNAME)
-                .registerStoredProcedureParameter(USERNAME_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(USERNAME_PARAM, String.class, ParameterMode.IN)
                 .setParameter(USERNAME_PARAM, username);
         Number result = (Number) query.getSingleResult();
-        return !ObjectUtils.isEmpty(result) && result.intValue() == 1;
+        return !ObjectUtils.isEmpty(result) && result.intValue() == EXISTS_VALUE;
     }
 
-    private boolean isExistEmail(String email) {
+    public boolean isExistEmail(String email) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(IS_EXIST_EMAIL)
-                .registerStoredProcedureParameter(EMAIL_PARAM, Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(EMAIL_PARAM, String.class, ParameterMode.IN)
                 .setParameter(EMAIL_PARAM, email);
         Number result = (Number) query.getSingleResult();
-        return !ObjectUtils.isEmpty(result) && result.intValue() == 1;
+        return !ObjectUtils.isEmpty(result) && result.intValue() == EXISTS_VALUE;
     }
+
 }

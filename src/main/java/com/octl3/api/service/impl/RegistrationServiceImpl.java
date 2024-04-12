@@ -6,6 +6,8 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.service.RegistrationService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.EmployeeValidator;
+import com.octl3.api.validator.StatusValidator;
 import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +34,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final EntityManager entityManager;
     private final UserValidator userValidator;
+    private final StatusValidator statusValidator;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public RegistrationDto create(RegistrationDto registrationDto) {
+        employeeValidator.existsById(registrationDto.getEmployeeId());
         registrationDto.setCreateDate(LocalDate.now());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         registrationDto.setCreateBy(authentication.getName());
-        registrationDto.setStatus(Status.CREATED.getValue());
+        registrationDto.setStatus(CREATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_REGISTRATION, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_JSON, String.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_JSON, JsonUtil.objectToJson(registrationDto));
@@ -67,6 +72,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @SuppressWarnings("unchecked")
     @Override
     public List<RegistrationDto> getByStatus(String status) {
+        statusValidator.checkValidStatus(status);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_REGISTRATION_BY_STATUS, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(STATUS_PARAM, String.class, ParameterMode.IN)
                 .setParameter(STATUS_PARAM, status);
@@ -76,6 +82,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public RegistrationDto updateByManager(long id, RegistrationDto registrationDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        employeeValidator.existsById(registrationDto.getEmployeeId());
+        registrationDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_MANAGER, REGISTRATION_DTO_MAPPER)
                 .registerStoredProcedureParameter(REGISTRATION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(REGISTRATION_ID_PARAM, id)
@@ -87,6 +95,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void submit(long id, RegistrationDto registrationDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkExistLeaderId(registrationDto.getLeaderId());
         registrationDto.setStatus(PENDING.getValue());
         registrationDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_REGISTRATION, REGISTRATION_DTO_MAPPER)
@@ -100,6 +109,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
         userValidator.checkIsForLeader(getById(id).getLeaderId());
+        statusValidator.checkValidLeaderStatus(registrationDto.getStatus());
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
         }

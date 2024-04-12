@@ -27,7 +27,7 @@ public class RelationshipValidator {
                         .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.RESULT, Integer.class, ParameterMode.OUT);
         Integer result = (Integer) query.getOutputParameterValue(Parameter.RESULT);
-        if (result != Const.EXISTS_RELATIONSHIP) {
+        if (result != Const.EXISTS_VALUE) {
             ApiSubError apiSubError = new ApiValidatorError(FieldName.RELATIONSHIP_ID, id, MessageConst.Relationship.NOT_FOUND);
             throw new OctNotFoundException(ErrorMessages.NOT_FOUND, apiSubError);
         }

@@ -14,7 +14,6 @@ public class Const {
     public static final String PHONE_REGEXP = "\\d{10,11}";
     public static final String USERNAME_REGEXP = "^[a-zA-Z][a-zA-Z0-9_-]{2,50}$";
     public static final String PASSWORD_REGEXP = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,20}$";
-    public static final int EXISTS_RELATIONSHIP = 1;
-    public static final int EXISTS_PROFILE_END = 1;
+    public static final int EXISTS_VALUE = 1;
 
 }

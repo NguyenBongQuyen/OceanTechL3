@@ -9,6 +9,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum Status {
     CREATED("Created"),
+    UPDATED("Updated"),
     PENDING("Pending"),
     SUBMITTED("Submitted"),
     REJECTED("Rejected"),
@@ -20,5 +21,13 @@ public enum Status {
     public static boolean isValidStatus(String status) {
         return Arrays.stream(Status.values())
                 .anyMatch(enumValue -> enumValue.value.equalsIgnoreCase(status));
+    }
+
+    public static boolean isValidLeaderStatus(String status) {
+        return Arrays.stream(Status.values())
+                .anyMatch(enumValue -> enumValue.value.equalsIgnoreCase(status) &&
+                        (enumValue == REJECTED ||
+                                enumValue == ACCEPTED ||
+                                enumValue == REQUIRES_REVISION));
     }
 }

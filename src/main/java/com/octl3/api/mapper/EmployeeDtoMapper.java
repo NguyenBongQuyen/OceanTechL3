@@ -14,7 +14,7 @@ import java.time.LocalDate;
         classes = @ConstructorResult(
                 targetClass = EmployeeDto.class,
                 columns = {
-                        @ColumnResult(name = "employee_id", type = Integer.class),
+                        @ColumnResult(name = "employee_id", type = Long.class),
                         @ColumnResult(name = "name", type = String.class),
                         @ColumnResult(name = "code", type = String.class),
                         @ColumnResult(name = "date_of_birth", type = LocalDate.class),

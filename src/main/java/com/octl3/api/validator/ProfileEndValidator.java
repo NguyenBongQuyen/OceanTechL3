@@ -27,7 +27,7 @@ public class ProfileEndValidator {
                         .setParameter(StoredProcedure.Parameter.PROFILE_END_ID_PARAM, id)
                         .registerStoredProcedureParameter(StoredProcedure.Parameter.RESULT, Integer.class, ParameterMode.OUT);
         Integer result = (Integer) query.getOutputParameterValue(StoredProcedure.Parameter.RESULT);
-        if (result != Const.EXISTS_PROFILE_END) {
+        if (result != Const.EXISTS_VALUE) {
             ApiSubError apiSubError = new ApiValidatorError(FieldName.PROFILE_END_ID, id, MessageConst.ProfileEnd.NOT_FOUND);
             throw new OctNotFoundException(ErrorMessages.NOT_FOUND, apiSubError);
         }

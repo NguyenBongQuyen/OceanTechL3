@@ -6,6 +6,8 @@ import com.octl3.api.constants.Status;
 import com.octl3.api.dto.PromotionDto;
 import com.octl3.api.service.PromotionService;
 import com.octl3.api.utils.JsonUtil;
+import com.octl3.api.validator.EmployeeValidator;
+import com.octl3.api.validator.StatusValidator;
 import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,7 @@ import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.octl3.api.constants.Status.ACCEPTED;
-import static com.octl3.api.constants.Status.REJECTED;
+import static com.octl3.api.constants.Status.*;
 import static com.octl3.api.constants.StoredProcedure.Mapper.PROMOTION_DTO_MAPPER;
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.Promotion.*;
@@ -33,9 +34,12 @@ public class PromotionServiceImpl implements PromotionService {
 
     private final EntityManager entityManager;
     private final UserValidator userValidator;
+    private final StatusValidator statusValidator;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public PromotionDto create(PromotionDto promotionDto) {
+        employeeValidator.existsById(promotionDto.getEmployeeId());
         promotionDto.setCreateDate(LocalDate.now());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         promotionDto.setCreateBy(authentication.getName());
@@ -68,6 +72,7 @@ public class PromotionServiceImpl implements PromotionService {
     @SuppressWarnings("unchecked")
     @Override
     public List<PromotionDto> getByStatus(String status) {
+        statusValidator.checkValidStatus(status);
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_PROMOTION_BY_STATUS, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(STATUS_PARAM, String.class, ParameterMode.IN)
                 .setParameter(STATUS_PARAM, status);
@@ -77,6 +82,8 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public PromotionDto updateByManager(long id, PromotionDto promotionDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        employeeValidator.existsById(promotionDto.getEmployeeId());
+        promotionDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROMOTION_BY_MANAGER, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id)
@@ -88,6 +95,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public void submit(long id, PromotionDto promotionDto) {
         userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkExistLeaderId(promotionDto.getLeaderId());
         promotionDto.setStatus(Status.PENDING.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(SUBMIT_PROMOTION, PROMOTION_DTO_MAPPER)
@@ -101,9 +109,9 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public PromotionDto updateByLeader(long id, PromotionDto promotionDto) {
         userValidator.checkIsForLeader(getById(id).getLeaderId());
+        statusValidator.checkValidLeaderStatus(promotionDto.getStatus());
         if (promotionDto.getStatus().equals(ACCEPTED.getValue())) {
             promotionDto.setAcceptDate(LocalDate.now());
-
         }
         if (promotionDto.getStatus().equals(REJECTED.getValue())) {
             promotionDto.setRejectDate(LocalDate.now());
