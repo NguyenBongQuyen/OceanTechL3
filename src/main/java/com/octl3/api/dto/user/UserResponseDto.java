@@ -12,11 +12,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponseDto {
+
     private String username;
-//    private Integer roleId;
     private String name;
     private String position;
     private String email;
     private String phone;
+
 }
 

@@ -28,12 +28,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public DataResponse<TokenResponse> login(@RequestBody UserLogin userLogin) {
+    public DataResponse<TokenResponse> login(@Valid @RequestBody UserLogin userLogin) {
         return DataResponse.ok(userService.login(userLogin));
     }
 
-    @GetMapping("/not-allow")
-    public DataResponse<String> notAllow() {
+    @GetMapping("/un-authorization")
+    public DataResponse<String> unAuthorization() {
         return DataResponse.build(UN_AUTHORIZATION, ErrorMessages.FORBIDDEN);
     }
 

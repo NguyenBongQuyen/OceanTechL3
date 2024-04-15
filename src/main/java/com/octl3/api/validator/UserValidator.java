@@ -66,7 +66,7 @@ public class UserValidator {
         return !ObjectUtils.isEmpty(result) && result.intValue() == EXISTS_VALUE;
     }
 
-    public boolean isExistEmail(String email) {
+    private boolean isExistEmail(String email) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(IS_EXIST_EMAIL)
                 .registerStoredProcedureParameter(EMAIL_PARAM, String.class, ParameterMode.IN)
                 .setParameter(EMAIL_PARAM, email);

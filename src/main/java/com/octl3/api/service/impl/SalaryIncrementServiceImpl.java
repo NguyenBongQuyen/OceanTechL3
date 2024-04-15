@@ -136,5 +136,4 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
             throw new OctException(ErrorMessages.DELETE_ERROR);
         }
     }
-
 }

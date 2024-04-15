@@ -6,6 +6,7 @@ import com.octl3.api.service.SalaryIncrementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -18,7 +19,7 @@ public class SalaryIncrementController {
     private final SalaryIncrementService salaryIncrementService;
 
     @PostMapping
-    public DataResponse<SalaryIncrementDto> create(@RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> create(@Valid @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.create(salaryIncrementDto));
     }
 
@@ -38,18 +39,21 @@ public class SalaryIncrementController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<SalaryIncrementDto> updateByManager(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> updateByManager(@PathVariable("id") long id,
+                                                            @Valid @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.updateByManager(id, salaryIncrementDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<String> submit(@PathVariable("id") long id,
+                                       @RequestBody SalaryIncrementDto salaryIncrementDto) {
         salaryIncrementService.submit(id, salaryIncrementDto);
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
     @PutMapping("/by-leader/{id}")
-    public DataResponse<SalaryIncrementDto> updateByLeader(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> updateByLeader(@PathVariable("id") long id,
+                                                           @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.updateByLeader(id, salaryIncrementDto));
     }
 

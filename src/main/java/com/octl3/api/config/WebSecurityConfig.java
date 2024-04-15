@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService);
     }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -58,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**/login", "/**/register", "/**/not-allow", "/**/un-authentication").permitAll()
+                .antMatchers("/**/login", "/**/register", "/**/un-authorization", "/**/un-authentication").permitAll()
                 .antMatchers(HttpMethod.PUT, "/**/by-leader/**").hasRole(LEADER)
                 .antMatchers(HttpMethod.PUT).hasRole(MANAGER)
                 .antMatchers(HttpMethod.DELETE).hasRole(MANAGER)

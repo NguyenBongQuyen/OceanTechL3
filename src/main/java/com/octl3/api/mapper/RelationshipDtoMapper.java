@@ -25,8 +25,6 @@ import java.time.LocalDate;
                         @ColumnResult(name = "relationship", type = String.class)
                 }
         )
-
 )
 public class RelationshipDtoMapper {
-
 }
