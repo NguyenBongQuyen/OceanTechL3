@@ -7,6 +7,7 @@ import com.octl3.api.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class RelationshipController {
     private final RelationshipService relationshipService;
 
     @PostMapping
-    public DataResponse<RelationshipDto> create(@RequestBody RelationshipDto relationshipDto) {
+    public DataResponse<RelationshipDto> create(@Valid @RequestBody RelationshipDto relationshipDto) {
         return DataResponse.ok(relationshipService.create(relationshipDto));
     }
 

@@ -8,7 +8,10 @@ import com.octl3.api.service.EmployeeService;
 import com.octl3.api.utils.JsonUtil;
 import com.octl3.api.utils.UploadFile;
 import com.octl3.api.validator.EmployeeValidator;
+import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,10 +27,14 @@ import static com.octl3.api.constants.FileConst.EMPLOYEE_IMAGE_PREFIX;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EntityManager entityManager;
+    private final UserValidator userValidator;
     private final EmployeeValidator employeeValidator;
 
     @Override
     public EmployeeDto create(EmployeeDto employeeDto, MultipartFile fileImage) {
+        employeeValidator.checkCreate(employeeDto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        employeeDto.setCreateBy(authentication.getName());
         if (!fileImage.isEmpty()) {
             employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
         }
@@ -67,6 +74,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto update(long id, EmployeeDto employeeDto, MultipartFile fileImage) {
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        EmployeeDto existingEmployeeDto = this.getById(id);
+        employeeValidator.checkUpdate(employeeDto, existingEmployeeDto);
         if (!fileImage.isEmpty()) {
             UploadFile.deleteImage(getById(id).getImage());
             employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
@@ -84,6 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteById(long id) {
         employeeValidator.existsById(id);
+        userValidator.checkCreateByManager(getById(id).getCreateBy());
         UploadFile.deleteImage(getById(id).getImage());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.DELETE)

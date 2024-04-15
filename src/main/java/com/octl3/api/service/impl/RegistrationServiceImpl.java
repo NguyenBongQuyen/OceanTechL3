@@ -2,7 +2,6 @@ package com.octl3.api.service.impl;
 
 import com.octl3.api.commons.exceptions.ErrorMessages;
 import com.octl3.api.commons.exceptions.OctException;
-import com.octl3.api.constants.Status;
 import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.service.RegistrationService;
 import com.octl3.api.utils.JsonUtil;

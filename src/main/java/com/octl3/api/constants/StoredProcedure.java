@@ -11,6 +11,8 @@ public class StoredProcedure {
         public static final String USER_ID_PARAM = "user_id_param";
         public static final String USERNAME_PARAM = "username_param";
         public static final String EMAIL_PARAM = "email_param";
+        public static final String PHONE_PARAM = "phone_param";
+        public static final String CITIZEN_ID_PARAM = "citizen_id_param";
         public static final String ROLE_NAME_PARAM = "role_name_param";
         public static final String ROLE_ID_PARAM = "role_id_param";
         public static final String REGISTRATION_JSON = "registration_data_json";
@@ -55,6 +57,9 @@ public class StoredProcedure {
         public static final String UPDATE = "update_employee";
         public static final String DELETE = "delete_employee";
         public static final String EXISTS_BY_ID = "exists_employee_by_id";
+        public static final String EXISTS_BY_PHONE = "exists_employee_by_phone";
+        public static final String EXISTS_BY_EMAIL = "exists_employee_by_email";
+        public static final String EXISTS_BY_CITIZEN_ID = "exists_employee_by_citizen_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -75,6 +80,8 @@ public class StoredProcedure {
         public static final String UPDATE = "update_relationship";
         public static final String DELETE = "delete_relationship";
         public static final String EXISTS_BY_ID = "exists_relationship_by_id";
+        public static final String EXISTS_BY_PHONE = "exists_relationship_by_phone";
+        public static final String EXISTS_BY_CITIZEN_ID = "exists_relationship_by_citizen_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -87,6 +94,7 @@ public class StoredProcedure {
         public static final String UPDATE_REGISTRATION_BY_LEADER = "update_registration_by_leader";
         public static final String UPDATE_REGISTRATION_BY_MANAGER = "update_registration_by_manager";
         public static final String DELETE_REGISTRATION = "delete_registration";
+        public static final String EXISTS_BY_ID = "exists_registration_by_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

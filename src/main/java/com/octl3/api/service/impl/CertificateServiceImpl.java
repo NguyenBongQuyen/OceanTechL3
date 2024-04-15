@@ -7,6 +7,7 @@ import com.octl3.api.dto.CertificateDto;
 import com.octl3.api.service.CertificateService;
 import com.octl3.api.utils.JsonUtil;
 import com.octl3.api.validator.CertificateValidator;
+import com.octl3.api.validator.EmployeeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,12 @@ import java.util.List;
 public class CertificateServiceImpl implements CertificateService {
     private final EntityManager entityManager;
     private final CertificateValidator certificateValidator;
+    private final EmployeeValidator employeeValidator;
 
     @Override
     public CertificateDto create(CertificateDto certificateDto) {
+        employeeValidator.existsById(certificateDto.getEmployeeId());
+        certificateValidator.checkCreateAndUpdate(certificateDto);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.CREATE, Mapper.CERTIFICATE_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
@@ -44,6 +48,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public List<CertificateDto> getByEmployeeId(long employeeId) {
+        employeeValidator.existsById(employeeId);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.GET_BY_EMPLOYEE_ID, Mapper.CERTIFICATE_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
@@ -63,6 +68,8 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public CertificateDto update(long id, CertificateDto certificateDto) {
+        employeeValidator.existsById(certificateDto.getEmployeeId());
+        certificateValidator.checkCreateAndUpdate(certificateDto);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Certificate.UPDATE, Mapper.CERTIFICATE_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_ID_PARAM, Long.class, ParameterMode.IN)
