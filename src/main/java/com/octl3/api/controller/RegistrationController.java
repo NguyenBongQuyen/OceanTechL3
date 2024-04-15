@@ -6,6 +6,7 @@ import com.octl3.api.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -18,7 +19,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping
-    public DataResponse<RegistrationDto> create(@RequestBody RegistrationDto registrationDto) {
+    public DataResponse<RegistrationDto> create(@Valid @RequestBody RegistrationDto registrationDto) {
         return DataResponse.ok(registrationService.create(registrationDto));
     }
 

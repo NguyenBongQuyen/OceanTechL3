@@ -6,6 +6,7 @@ import com.octl3.api.service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -18,7 +19,7 @@ public class PromotionController {
     private final PromotionService promotionService;
 
     @PostMapping
-    public DataResponse<PromotionDto> create(@RequestBody PromotionDto promotionDto) {
+    public DataResponse<PromotionDto> create(@Valid @RequestBody PromotionDto promotionDto) {
         return DataResponse.ok(promotionService.create(promotionDto));
     }
 

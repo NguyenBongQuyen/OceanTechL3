@@ -6,6 +6,7 @@ import com.octl3.api.service.ProposalAdviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -18,7 +19,7 @@ public class ProposalAdviceController {
     private final ProposalAdviceService proposalAdviceService;
 
     @PostMapping
-    public DataResponse<ProposalAdviceDto> create(@RequestBody ProposalAdviceDto proposalAdviceDto) {
+    public DataResponse<ProposalAdviceDto> create(@Valid @RequestBody ProposalAdviceDto proposalAdviceDto) {
         return DataResponse.ok(proposalAdviceService.create(proposalAdviceDto));
     }
 

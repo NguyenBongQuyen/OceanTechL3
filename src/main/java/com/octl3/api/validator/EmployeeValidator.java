@@ -24,7 +24,7 @@ public class EmployeeValidator {
                 .registerStoredProcedureParameter(EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(EMPLOYEE_ID_PARAM, id);
         Number result = (Number) query.getSingleResult();
-        if (ObjectUtils.isEmpty(result) && result.intValue() != EXISTS_VALUE) {
+        if (ObjectUtils.isEmpty(result) || result.intValue() != EXISTS_VALUE) {
             throw new OctException(NOT_FOUND_EMPLOYEE_ID);
         }
     }

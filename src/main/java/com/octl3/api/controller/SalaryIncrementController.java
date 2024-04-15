@@ -6,6 +6,7 @@ import com.octl3.api.service.SalaryIncrementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -18,7 +19,7 @@ public class SalaryIncrementController {
     private final SalaryIncrementService salaryIncrementService;
 
     @PostMapping
-    public DataResponse<SalaryIncrementDto> create(@RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> create(@Valid @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.create(salaryIncrementDto));
     }
 
