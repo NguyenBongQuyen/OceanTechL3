@@ -2,7 +2,6 @@ package com.octl3.api.mapper;
 
 import com.octl3.api.dto.RegistrationDto;
 
-
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.MappedSuperclass;

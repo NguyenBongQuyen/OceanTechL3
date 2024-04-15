@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 public class SalaryIncrementDto {
 
     private Long id;
+    @NotNull
     private Long employeeId;
     private Long leaderId;
     private LocalDate createDate;

@@ -1,6 +1,5 @@
 package com.octl3.api.mapper;
 
-
 import com.octl3.api.dto.user.UserDto;
 
 import javax.persistence.ColumnResult;

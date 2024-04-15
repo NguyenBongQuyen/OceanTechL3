@@ -155,9 +155,9 @@ public class StoredProcedure {
         public static final String IS_EXIST_ROLE_BY_ID = "is_exist_role_by_id";
         public static final String IS_EXIST_USERNAME = "is_exist_username";
         public static final String IS_EXIST_EMAIL = "is_exist_email";
+        public static final String GET_ALL_LEADER = "get_all_leader";
+        public static final String GET_LEADER_BY_ID = "get_leader_by_id";
         public static final String IS_EXIST_LEADER_ID = "is_exist_leader_id";
-
-
     }
 
 }

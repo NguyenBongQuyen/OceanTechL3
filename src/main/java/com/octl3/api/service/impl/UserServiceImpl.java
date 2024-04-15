@@ -24,13 +24,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 
+import java.util.List;
+
 import static com.octl3.api.constants.SecurityConst.MANAGER;
 import static com.octl3.api.constants.StoredProcedure.Mapper.USER_RESPONSE_DTO_MAPPER;
-import static com.octl3.api.constants.StoredProcedure.Parameter.USER_JSON;
-import static com.octl3.api.constants.StoredProcedure.User.CREATE_USER;
+import static com.octl3.api.constants.StoredProcedure.Parameter.*;
+import static com.octl3.api.constants.StoredProcedure.User.*;
 
 @Slf4j
 @Service
@@ -76,6 +79,25 @@ public class UserServiceImpl implements UserService {
             throw new OctException(ErrorMessages.PASSWORD_LOGIN_FAIL);
         } catch (Exception exception) {
             throw new OctException(ErrorMessages.USERNAME_LOGIN_FAIL);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UserResponseDto> getAllLeader() {
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_ALL_LEADER, USER_RESPONSE_DTO_MAPPER);
+        return query.getResultList();
+    }
+
+    @Override
+    public UserResponseDto getLeaderById(Long id) {
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_LEADER_BY_ID, USER_RESPONSE_DTO_MAPPER)
+                .registerStoredProcedureParameter(USER_ID_PARAM, Long.class, ParameterMode.IN)
+                .setParameter(USER_ID_PARAM, id);
+        try {
+            return (UserResponseDto) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new OctException(ErrorMessages.NOT_FOUND);
         }
     }
 }

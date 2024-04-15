@@ -6,6 +6,7 @@ import com.octl3.api.service.ProposalAdviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.octl3.api.constants.MessageConst.DELETE_SUCCESS;
@@ -15,10 +16,11 @@ import static com.octl3.api.constants.MessageConst.SUBMIT_SUCCESS;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/proposal-advices")
 public class ProposalAdviceController {
+
     private final ProposalAdviceService proposalAdviceService;
 
     @PostMapping
-    public DataResponse<ProposalAdviceDto> create(@RequestBody ProposalAdviceDto proposalAdviceDto) {
+    public DataResponse<ProposalAdviceDto> create(@Valid @RequestBody ProposalAdviceDto proposalAdviceDto) {
         return DataResponse.ok(proposalAdviceService.create(proposalAdviceDto));
     }
 
@@ -38,18 +40,21 @@ public class ProposalAdviceController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<ProposalAdviceDto> updateByManager(@PathVariable("id") long id, @RequestBody ProposalAdviceDto proposalAdviceDto) {
+    public DataResponse<ProposalAdviceDto> updateByManager(@PathVariable("id") long id,
+                                                           @Valid @RequestBody ProposalAdviceDto proposalAdviceDto) {
         return DataResponse.ok(proposalAdviceService.updateByManager(id, proposalAdviceDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") long id, @RequestBody ProposalAdviceDto proposalAdviceDto) {
+    public DataResponse<String> submit(@PathVariable("id") long id,
+                                       @RequestBody ProposalAdviceDto proposalAdviceDto) {
         proposalAdviceService.submit(id, proposalAdviceDto);
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
     @PutMapping("/by-leader/{id}")
-    public DataResponse<ProposalAdviceDto> updateByLeader(@PathVariable("id") long id, @RequestBody ProposalAdviceDto proposalAdviceDto) {
+    public DataResponse<ProposalAdviceDto> updateByLeader(@PathVariable("id") long id,
+                                                          @RequestBody ProposalAdviceDto proposalAdviceDto) {
         return DataResponse.ok(proposalAdviceService.updateByLeader(id, proposalAdviceDto));
     }
 

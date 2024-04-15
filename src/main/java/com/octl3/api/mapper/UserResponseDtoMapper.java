@@ -14,7 +14,6 @@ import javax.persistence.SqlResultSetMapping;
                 targetClass = UserResponseDto.class,
                 columns = {
                         @ColumnResult(name = "username", type = String.class),
-//                        @ColumnResult(name = "role_id", type = Integer.class),
                         @ColumnResult(name = "name", type = String.class),
                         @ColumnResult(name = "position", type = String.class),
                         @ColumnResult(name = "email", type = String.class),
