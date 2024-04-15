@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public DataResponse<EmployeeDto> create(@RequestPart("employeeDto") EmployeeDto employeeDto,
+    public DataResponse<EmployeeDto> create(@Valid @RequestPart("employeeDto") EmployeeDto employeeDto,
                                             @RequestPart("fileImage") MultipartFile fileImage) {
         return DataResponse.ok(employeeService.create(employeeDto, fileImage));
     }

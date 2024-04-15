@@ -16,14 +16,14 @@ public class CommonValidator {
         Period ageDifference = Period.between(dateOfBirth, currentDate);
         int age = ageDifference.getYears();
         if (age <= Const.MIN_AGE || age >= Const.MAX_AGE) {
-            throw new OctException(ErrorMessages.INVALID_VALUE);
+            throw new OctException(ErrorMessages.INVALID_DATE_OF_BIRTH);
         }
     }
 
     public void checkDateInTheFuture(LocalDate date) {
         LocalDate currentDate = LocalDate.now();
         if (date.isAfter(currentDate)) {
-            throw new OctException(ErrorMessages.INVALID_VALUE);
+            throw new OctException(ErrorMessages.INVALID_DATE);
         }
     }
 }
