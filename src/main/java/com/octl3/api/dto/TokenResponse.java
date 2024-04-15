@@ -8,6 +8,7 @@ import static com.octl3.api.constants.SecurityConst.TOKEN_TYPE;
 @Getter
 @Setter
 public class TokenResponse {
+
     private String accessToken;
     private String tokenType;
 

@@ -1,6 +1,5 @@
 package com.octl3.api.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

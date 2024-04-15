@@ -39,18 +39,21 @@ public class RegistrationController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<RegistrationDto> updateByManager(@PathVariable("id") long id, @RequestBody RegistrationDto registrationDto) {
+    public DataResponse<RegistrationDto> updateByManager(@PathVariable("id") long id,
+                                                         @Valid @RequestBody RegistrationDto registrationDto) {
         return DataResponse.ok(registrationService.updateByManager(id, registrationDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") long id, @RequestBody RegistrationDto registrationDto) {
+    public DataResponse<String> submit(@PathVariable("id") long id,
+                                       @RequestBody RegistrationDto registrationDto) {
         registrationService.submit(id, registrationDto);
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
     @PutMapping("/by-leader/{id}")
-    public DataResponse<RegistrationDto> updateByLeader(@PathVariable("id") long id, @RequestBody RegistrationDto registrationDto) {
+    public DataResponse<RegistrationDto> updateByLeader(@PathVariable("id") long id,
+                                                        @RequestBody RegistrationDto registrationDto) {
         return DataResponse.ok(registrationService.updateByLeader(id, registrationDto));
     }
 

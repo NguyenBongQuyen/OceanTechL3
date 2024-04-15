@@ -39,18 +39,21 @@ public class SalaryIncrementController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<SalaryIncrementDto> updateByManager(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> updateByManager(@PathVariable("id") long id,
+                                                            @Valid @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.updateByManager(id, salaryIncrementDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<String> submit(@PathVariable("id") long id,
+                                       @RequestBody SalaryIncrementDto salaryIncrementDto) {
         salaryIncrementService.submit(id, salaryIncrementDto);
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
     @PutMapping("/by-leader/{id}")
-    public DataResponse<SalaryIncrementDto> updateByLeader(@PathVariable("id") long id, @RequestBody SalaryIncrementDto salaryIncrementDto) {
+    public DataResponse<SalaryIncrementDto> updateByLeader(@PathVariable("id") long id,
+                                                           @RequestBody SalaryIncrementDto salaryIncrementDto) {
         return DataResponse.ok(salaryIncrementService.updateByLeader(id, salaryIncrementDto));
     }
 

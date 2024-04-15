@@ -1,6 +1,5 @@
 package com.octl3.api.mapper;
 
-import com.octl3.api.dto.RegistrationDto;
 import com.octl3.api.dto.SalaryIncrementDto;
 
 import javax.persistence.ColumnResult;

@@ -16,6 +16,7 @@ import static com.octl3.api.constants.MessageConst.SUBMIT_SUCCESS;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/promotions")
 public class PromotionController {
+
     private final PromotionService promotionService;
 
     @PostMapping
@@ -39,18 +40,21 @@ public class PromotionController {
     }
 
     @PutMapping("/{id}")
-    public DataResponse<PromotionDto> updateByManager(@PathVariable("id") long id, @RequestBody PromotionDto promotionDto) {
+    public DataResponse<PromotionDto> updateByManager(@PathVariable("id") long id,
+                                                      @Valid @RequestBody PromotionDto promotionDto) {
         return DataResponse.ok(promotionService.updateByManager(id, promotionDto));
     }
 
     @PutMapping("/submit/{id}")
-    public DataResponse<String> submit(@PathVariable("id") long id, @RequestBody PromotionDto promotionDto) {
+    public DataResponse<String> submit(@PathVariable("id") long id,
+                                       @RequestBody PromotionDto promotionDto) {
         promotionService.submit(id, promotionDto);
         return DataResponse.ok(SUBMIT_SUCCESS);
     }
 
     @PutMapping("/by-leader/{id}")
-    public DataResponse<PromotionDto> updateByLeader(@PathVariable("id") long id, @RequestBody PromotionDto promotionDto) {
+    public DataResponse<PromotionDto> updateByLeader(@PathVariable("id") long id,
+                                                     @RequestBody PromotionDto promotionDto) {
         return DataResponse.ok(promotionService.updateByLeader(id, promotionDto));
     }
 

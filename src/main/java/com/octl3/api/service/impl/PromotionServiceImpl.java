@@ -10,7 +10,6 @@ import com.octl3.api.validator.EmployeeValidator;
 import com.octl3.api.validator.StatusValidator;
 import com.octl3.api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ import static com.octl3.api.constants.StoredProcedure.Mapper.PROMOTION_DTO_MAPPE
 import static com.octl3.api.constants.StoredProcedure.Parameter.*;
 import static com.octl3.api.constants.StoredProcedure.Promotion.*;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {

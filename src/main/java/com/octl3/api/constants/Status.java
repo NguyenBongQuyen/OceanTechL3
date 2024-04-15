@@ -14,7 +14,7 @@ public enum Status {
     SUBMITTED("Submitted"),
     REJECTED("Rejected"),
     ACCEPTED("Accepted"),
-    REQUIRES_REVISION("Requires Revision");
+    ADDITIONAL("Additional");
 
     private final String value;
 
@@ -24,10 +24,8 @@ public enum Status {
     }
 
     public static boolean isValidLeaderStatus(String status) {
-        return Arrays.stream(Status.values())
-                .anyMatch(enumValue -> enumValue.value.equalsIgnoreCase(status) &&
-                        (enumValue == REJECTED ||
-                                enumValue == ACCEPTED ||
-                                enumValue == REQUIRES_REVISION));
+        return (status.equalsIgnoreCase(ACCEPTED.value) ||
+                status.equalsIgnoreCase(REJECTED.value) ||
+                status.equalsIgnoreCase(ADDITIONAL.value));
     }
 }

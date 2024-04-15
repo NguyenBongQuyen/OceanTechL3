@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @GetMapping("/un-authorization")
-    public DataResponse<String> notAllow() {
+    public DataResponse<String> unAuthorization() {
         return DataResponse.build(UN_AUTHORIZATION, ErrorMessages.FORBIDDEN);
     }
 

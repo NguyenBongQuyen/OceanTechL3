@@ -1,5 +1,9 @@
 package com.octl3.api.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityConst {
 
     public static final String TOKEN_TYPE = "Bearer";
