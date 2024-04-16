@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityConst {
 
+    public static final String HEADER = "Authorization";
     public static final String TOKEN_TYPE = "Bearer";
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String LEADER = "LEADER";

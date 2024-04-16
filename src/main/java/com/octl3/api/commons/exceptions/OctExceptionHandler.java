@@ -1,7 +1,6 @@
 package com.octl3.api.commons.exceptions;
 
 import com.octl3.api.commons.DataResponse;
-import com.octl3.api.security.CustomAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -64,9 +63,4 @@ public class OctExceptionHandler {
         return new ResponseEntity<>(DataResponse.build(ex.getMessage(), ErrorMessages.FORBIDDEN), HttpStatus.OK);
     }
 
-    @ExceptionHandler(CustomAuthenticationException.class)
-    protected ResponseEntity<DataResponse<String>> handleAuthenticationException(CustomAuthenticationException ex) {
-        log.info("handleAuthenticationException. Msg = {}", ex.getMessage(), ex);
-        return new ResponseEntity<>(DataResponse.build(ex.getMessage(), ErrorMessages.UNAUTHORIZED), HttpStatus.OK);
-    }
 }

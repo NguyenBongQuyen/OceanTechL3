@@ -29,7 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .registerStoredProcedureParameter(USERNAME_PARAM, String.class, ParameterMode.IN)
                 .setParameter(USERNAME_PARAM, username);
         UserDto userDto = (UserDto) query.getSingleResult();
-
         return new CustomUserDetails(userDto, roleService);
     }
 

@@ -79,7 +79,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByManager(long id, PromotionDto promotionDto) {
-        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
         employeeValidator.existsById(promotionDto.getEmployeeId());
         promotionDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROMOTION_BY_MANAGER, PROMOTION_DTO_MAPPER)
@@ -92,7 +92,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void submit(long id, PromotionDto promotionDto) {
-        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
         userValidator.checkExistLeaderId(promotionDto.getLeaderId());
         promotionDto.setStatus(Status.PENDING.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
@@ -106,7 +106,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByLeader(long id, PromotionDto promotionDto) {
-        userValidator.checkIsForLeader(getById(id).getLeaderId());
+        userValidator.checkIsForLeader(this.getById(id).getLeaderId());
         statusValidator.checkValidLeaderStatus(promotionDto.getStatus());
         if (promotionDto.getStatus().equals(ACCEPTED.getValue())) {
             promotionDto.setAcceptDate(LocalDate.now());
@@ -124,7 +124,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void deleteById(long id) {
-        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(DELETE_PROMOTION, PROMOTION_DTO_MAPPER)
                 .registerStoredProcedureParameter(PROMOTION_ID_PARAM, Long.class, ParameterMode.IN)
                 .setParameter(PROMOTION_ID_PARAM, id);

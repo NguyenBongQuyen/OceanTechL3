@@ -1,6 +1,5 @@
 package com.octl3.api.validator.anotations;
 
-
 import com.octl3.api.validator.UsernameValidator;
 
 import javax.validation.Constraint;
