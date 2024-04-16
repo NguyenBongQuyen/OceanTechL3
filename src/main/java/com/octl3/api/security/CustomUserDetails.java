@@ -3,7 +3,6 @@ package com.octl3.api.security;
 import com.octl3.api.dto.user.UserDto;
 import com.octl3.api.service.RoleService;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

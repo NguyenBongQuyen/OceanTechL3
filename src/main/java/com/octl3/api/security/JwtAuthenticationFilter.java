@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.octl3.api.constants.SecurityConst.HEADER;
 import static com.octl3.api.constants.SecurityConst.TOKEN_TYPE;
 
 @Slf4j
@@ -27,7 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
@@ -41,11 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken
                             authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            }
 
+            }
         } catch (Exception ex) {
             log.error("failed on set user authentication", ex);
         }
@@ -53,9 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_TYPE)) {
-            return bearerToken.substring(7);
+            return bearerToken.substring(TOKEN_TYPE.length()).trim();
         }
         return null;
     }

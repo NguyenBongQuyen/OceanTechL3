@@ -16,4 +16,5 @@ public interface UserService {
     List<UserResponseDto> getAllLeader();
 
     UserResponseDto getLeaderById(Long id);
+    
 }

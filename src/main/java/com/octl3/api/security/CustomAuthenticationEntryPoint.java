@@ -14,7 +14,6 @@ import static com.octl3.api.constants.SecurityConst.API_UN_AUTHENTICATION;
 @Component
 @Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.sendRedirect(API_UN_AUTHENTICATION);
