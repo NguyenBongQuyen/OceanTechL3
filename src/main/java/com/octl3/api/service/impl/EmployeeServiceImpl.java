@@ -42,8 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 entityManager.createStoredProcedureQuery(Employee.CREATE, Mapper.EMPLOYEE_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_JSON, JsonUtil.objectToJson(employeeDto));
-        query.execute();
-        return employeeDto;
+        return (EmployeeDto) query.getSingleResult();
     }
 
     @Override
@@ -87,8 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                         .setParameter(Parameter.EMPLOYEE_ID_PARAM, id)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.EMPLOYEE_JSON, JsonUtil.objectToJson(employeeDto));
-        query.execute();
-        return employeeDto;
+        return (EmployeeDto) query.getSingleResult();
     }
 
     @Override
