@@ -25,6 +25,7 @@ public class SalaryIncrementDto {
     private String createBy;
     private Integer times;
     private String reason;
+    @NotNull
     private String salaryLevel;
     private String status;
     private LocalDate submitDate;

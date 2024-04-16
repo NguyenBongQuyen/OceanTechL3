@@ -24,7 +24,9 @@ public class PromotionDto {
     private String createBy;
     private Integer times;
     private String reason;
+    @NotNull
     private String newPosition;
+    @NotNull
     private String oldPosition;
     private String status;
     private LocalDate submitDate;
