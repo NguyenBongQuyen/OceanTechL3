@@ -41,7 +41,7 @@ public class ProfileEndController {
         return DataResponse.ok(profileEndService.updateByManager(id, profileEndDto));
     }
 
-    @PutMapping("/leader/{id}")
+    @PutMapping("/by-leader/{id}")
     public DataResponse<ProfileEndDto> updateByLeader(@PathVariable("id") long id,
                                                       @RequestBody ProfileEndDto profileEndDto) {
         return DataResponse.ok(profileEndService.updateByLeader(id, profileEndDto));

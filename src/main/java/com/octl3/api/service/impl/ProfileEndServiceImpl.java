@@ -67,7 +67,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     @SuppressWarnings("unchecked")
     @Override
     public List<ProfileEndDto> getByStatus(String status) {
-        statusValidator.checkValidLeaderStatus(status);
+        statusValidator.checkValidStatus(status);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.GET_BY_STATUS, Mapper.PROFILE_END_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.STATUS_PARAM, String.class, ParameterMode.IN)
@@ -112,7 +112,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     public void submit(long id, ProfileEndDto profileEndDto) {
         userValidator.checkCreateByManager(getById(id).getEndBy());
         userValidator.checkExistLeaderId(profileEndDto.getLeaderId());
-        profileEndDto.setStatus(Status.SUBMITTED.getValue());
+        profileEndDto.setStatus(Status.PENDING.getValue());
         profileEndDto.setSubmitDate(LocalDate.now());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.SUBMIT, Mapper.PROFILE_END_DTO_MAPPER)

@@ -25,7 +25,7 @@ public class RelationshipValidator {
     public void existsById(long id) {
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.EXISTS_BY_ID)
-                        .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)
                         .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id);
         Number result = (Number) query.getSingleResult();
         if (result.intValue() != Const.EXISTS_VALUE) {

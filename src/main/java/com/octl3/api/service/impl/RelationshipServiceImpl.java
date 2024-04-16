@@ -31,8 +31,7 @@ public class RelationshipServiceImpl implements RelationshipService {
                 entityManager.createStoredProcedureQuery(Relationship.CREATE, Mapper.RELATIONSHIP_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.RELATIONSHIP_JSON, JsonUtil.objectToJson(relationshipDto));
-        query.execute();
-        return relationshipDto;
+        return (RelationshipDto) query.getSingleResult();
     }
 
     @Override
@@ -67,8 +66,7 @@ public class RelationshipServiceImpl implements RelationshipService {
                 .setParameter(Parameter.RELATIONSHIP_ID_PARAM, id)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.RELATIONSHIP_JSON, JsonUtil.objectToJson(relationshipDto));
-        query.execute();
-        return relationshipDto;
+        return (RelationshipDto) query.getSingleResult();
     }
 
     @Override

@@ -32,8 +32,7 @@ public class CertificateServiceImpl implements CertificateService {
                 entityManager.createStoredProcedureQuery(Certificate.CREATE, Mapper.CERTIFICATE_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_JSON, JsonUtil.objectToJson(certificateDto));
-        query.execute();
-        return certificateDto;
+        return (CertificateDto) query.getSingleResult();
     }
 
     @Override
@@ -68,6 +67,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public CertificateDto update(long id, CertificateDto certificateDto) {
+        certificateValidator.existsById(id);
         employeeValidator.existsById(certificateDto.getEmployeeId());
         certificateValidator.checkCreateAndUpdate(certificateDto);
         StoredProcedureQuery query =
@@ -76,8 +76,7 @@ public class CertificateServiceImpl implements CertificateService {
                 .setParameter(Parameter.CERTIFICATE_ID_PARAM, id)
                 .registerStoredProcedureParameter(Parameter.CERTIFICATE_JSON, String.class, ParameterMode.IN)
                 .setParameter(Parameter.CERTIFICATE_JSON, JsonUtil.objectToJson(certificateDto));
-        query.execute();
-        return certificateDto;
+        return (CertificateDto) query.getSingleResult();
     }
 
     @Override
