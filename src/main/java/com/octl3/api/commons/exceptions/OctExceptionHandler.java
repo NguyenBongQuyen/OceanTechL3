@@ -6,6 +6,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,22 +46,16 @@ public class OctExceptionHandler {
         return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
     }
 
-    @ExceptionHandler(OctNotFoundException.class)
-    protected ResponseEntity<DataResponse<String>> handleOctNotFoundException(OctNotFoundException ex) {
-        log.info("handleOctNotFoundException");
-        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
-    }
-
-    @ExceptionHandler(OctDuplicateException.class)
-    protected ResponseEntity<DataResponse<String>> handleOctDuplicateException(OctDuplicateException ex) {
-        log.info("handleOctDuplicateException");
-        return new ResponseEntity<>(new DataResponse<>(ex.getErrMsg()), HttpStatus.OK);
-    }
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<DataResponse<String>> handleAccessDeniedException(AccessDeniedException ex) {
         log.info("handleAccessDeniedException. Msg = {}", ex.getMessage(), ex);
         return new ResponseEntity<>(DataResponse.build(ex.getMessage(), ErrorMessages.FORBIDDEN), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<DataResponse<String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.info("handleHttpMessageNotReadableException. Msg = {}", ex.getMessage(), ex);
+        return new ResponseEntity<>(DataResponse.build(ex.getMessage(), ErrorMessages.INVALID_DATE), HttpStatus.BAD_REQUEST);
     }
 
 }

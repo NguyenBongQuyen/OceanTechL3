@@ -13,4 +13,5 @@ public class MessageConst {
     public static final String UN_AUTHORIZATION = "You do not have access to this resource!";
     public static final String UN_AUTHENTICATION  = "Authentication information is incorrect, please log in to continue!";
     public static final String CITIZEN_ID_WRONG_FORMAT = "Citizen id must have 12 numbers";
+    public static final String INVALID_DATE = "Invalid date";
 }

@@ -7,6 +7,7 @@ import com.octl3.api.service.ProfileEndService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class ProfileEndController {
     private final ProfileEndService profileEndService;
 
     @PostMapping
-    public DataResponse<ProfileEndDto> create(@RequestBody ProfileEndDto profileEndDto) {
+    public DataResponse<ProfileEndDto> create(@Valid @RequestBody ProfileEndDto profileEndDto) {
         return DataResponse.ok(profileEndService.create(profileEndDto));
     }
 
@@ -37,14 +38,8 @@ public class ProfileEndController {
 
     @PutMapping("/{id}")
     public DataResponse<ProfileEndDto> updateByManager(@PathVariable("id") long id,
-                                                       @RequestBody ProfileEndDto profileEndDto) {
+                                                       @Valid @RequestBody ProfileEndDto profileEndDto) {
         return DataResponse.ok(profileEndService.updateByManager(id, profileEndDto));
-    }
-
-    @PutMapping("/by-leader/{id}")
-    public DataResponse<ProfileEndDto> updateByLeader(@PathVariable("id") long id,
-                                                      @RequestBody ProfileEndDto profileEndDto) {
-        return DataResponse.ok(profileEndService.updateByLeader(id, profileEndDto));
     }
 
     @PutMapping("/submit/{id}")
@@ -52,6 +47,12 @@ public class ProfileEndController {
                                        @RequestBody ProfileEndDto profileEndDto) {
         profileEndService.submit(id, profileEndDto);
         return DataResponse.ok(MessageConst.SUBMIT_SUCCESS);
+    }
+
+    @PutMapping("/by-leader/{id}")
+    public DataResponse<ProfileEndDto> updateByLeader(@PathVariable("id") long id,
+                                                      @RequestBody ProfileEndDto profileEndDto) {
+        return DataResponse.ok(profileEndService.updateByLeader(id, profileEndDto));
     }
 
     @DeleteMapping("/{id}")

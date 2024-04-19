@@ -7,6 +7,7 @@ import com.octl3.api.service.CertificateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class CertificateController {
     private final CertificateService certificateService;
 
     @PostMapping
-    public DataResponse<CertificateDto> create(@RequestBody CertificateDto certificateDto) {
+    public DataResponse<CertificateDto> create(@Valid @RequestBody CertificateDto certificateDto) {
         return DataResponse.ok(certificateService.create(certificateDto));
     }
 
@@ -32,7 +33,7 @@ public class CertificateController {
 
     @PutMapping("/{id}")
     public DataResponse<CertificateDto> update(@PathVariable("id") long id,
-                                               @RequestBody CertificateDto certificateDto) {
+                                               @Valid @RequestBody CertificateDto certificateDto) {
         return DataResponse.ok(certificateService.update(id, certificateDto));
     }
 

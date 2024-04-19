@@ -90,6 +90,21 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     }
 
     @Override
+    public void submit(long id, ProfileEndDto profileEndDto) {
+        userValidator.checkCreateByManager(getById(id).getEndBy());
+        userValidator.checkExistLeaderId(profileEndDto.getLeaderId());
+        profileEndDto.setStatus(Status.PENDING.getValue());
+        profileEndDto.setSubmitDate(LocalDate.now());
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery(ProfileEnd.SUBMIT, Mapper.PROFILE_END_DTO_MAPPER)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
+                        .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
+                        .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
+                        .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
+        query.execute();
+    }
+
+    @Override
     public ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto) {
         userValidator.checkIsForLeader(getById(id).getLeaderId());
         statusValidator.checkValidLeaderStatus(profileEndDto.getStatus());
@@ -106,21 +121,6 @@ public class ProfileEndServiceImpl implements ProfileEndService {
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
                         .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
         return (ProfileEndDto) query.getSingleResult();
-    }
-
-    @Override
-    public void submit(long id, ProfileEndDto profileEndDto) {
-        userValidator.checkCreateByManager(getById(id).getEndBy());
-        userValidator.checkExistLeaderId(profileEndDto.getLeaderId());
-        profileEndDto.setStatus(Status.PENDING.getValue());
-        profileEndDto.setSubmitDate(LocalDate.now());
-        StoredProcedureQuery query =
-                entityManager.createStoredProcedureQuery(ProfileEnd.SUBMIT, Mapper.PROFILE_END_DTO_MAPPER)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)
-                        .setParameter(Parameter.PROFILE_END_ID_PARAM, id)
-                        .registerStoredProcedureParameter(Parameter.PROFILE_END_JSON, String.class, ParameterMode.IN)
-                        .setParameter(Parameter.PROFILE_END_JSON, JsonUtil.objectToJson(profileEndDto));
-        query.execute();
     }
 
     @Override

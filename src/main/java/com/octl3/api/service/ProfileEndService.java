@@ -10,7 +10,7 @@ public interface ProfileEndService {
     List<ProfileEndDto> getAll();
     List<ProfileEndDto> getByStatus(String status);
     ProfileEndDto updateByManager(long id, ProfileEndDto profileEndDto);
-    ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto);
     void submit(long id, ProfileEndDto profileEndDto);
+    ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto);
     void deleteById(long id);
 }

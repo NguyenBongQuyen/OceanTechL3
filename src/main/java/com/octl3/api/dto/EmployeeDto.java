@@ -1,6 +1,5 @@
 package com.octl3.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.octl3.api.validator.anotations.CitizenId;
 import com.octl3.api.validator.anotations.Phone;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeDto {
     private Long id;
     private String name;

@@ -23,7 +23,8 @@ public class CommonValidator {
     public void checkDateInTheFuture(LocalDate date) {
         LocalDate currentDate = LocalDate.now();
         if (date.isAfter(currentDate)) {
-            throw new OctException(ErrorMessages.INVALID_DATE);
+            throw new OctException(ErrorMessages.DATE_CAN_NOT_IN_THE_FUTURE);
         }
     }
+
 }
