@@ -28,4 +28,19 @@ public enum Status {
                 status.equalsIgnoreCase(REJECTED.value) ||
                 status.equalsIgnoreCase(ADDITIONAL.value));
     }
+
+    public static boolean isValidStatusForManagerUpdate(String status) {
+        return (status.equalsIgnoreCase(CREATED.value) ||
+                status.equalsIgnoreCase(UPDATED.value) ||
+                status.equalsIgnoreCase(ADDITIONAL.value));
+    }
+
+    public static boolean isValidStatusForSubmit(String status) {
+        return (status.equalsIgnoreCase(CREATED.value) ||
+                status.equalsIgnoreCase(UPDATED.value));
+    }
+
+    public static boolean isValidStatusForLeaderUpdate(String status) {
+        return (status.equalsIgnoreCase(PENDING.value));
+    }
 }

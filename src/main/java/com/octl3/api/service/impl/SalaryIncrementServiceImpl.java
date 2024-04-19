@@ -79,7 +79,9 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByManager(long id, SalaryIncrementDto salaryIncrementDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        SalaryIncrementDto existedSalaryIncrementDto = this.getById(id);
+        userValidator.checkCreateByManager(existedSalaryIncrementDto.getCreateBy());
+        statusValidator.checkValidStatusForManagerUpdate(existedSalaryIncrementDto.getStatus());
         employeeValidator.existsById(salaryIncrementDto.getEmployeeId());
         salaryIncrementDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_SALARY_INCREMENT_BY_MANAGER, SALARY_INCREMENT_DTO_MAPPER)
@@ -92,7 +94,9 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public void submit(long id, SalaryIncrementDto salaryIncrementDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        SalaryIncrementDto existedSalaryIncrementDto = this.getById(id);
+        userValidator.checkCreateByManager(existedSalaryIncrementDto.getCreateBy());
+        statusValidator.checkValidStatusForSubmit(existedSalaryIncrementDto.getStatus());
         userValidator.checkExistLeaderId(salaryIncrementDto.getLeaderId());
         salaryIncrementDto.setStatus(Status.PENDING.getValue());
         salaryIncrementDto.setSubmitDate(LocalDate.now());
@@ -106,7 +110,9 @@ public class SalaryIncrementServiceImpl implements SalaryIncrementService {
 
     @Override
     public SalaryIncrementDto updateByLeader(long id, SalaryIncrementDto salaryIncrementDto) {
-        userValidator.checkIsForLeader(this.getById(id).getLeaderId());
+        SalaryIncrementDto existedSalaryIncrementDto = this.getById(id);
+        statusValidator.checkValidStatusForLeaderUpdate(existedSalaryIncrementDto.getStatus());
+        userValidator.checkIsForLeader(existedSalaryIncrementDto.getLeaderId());
         statusValidator.checkValidLeaderStatus(salaryIncrementDto.getStatus());
         if (salaryIncrementDto.getStatus().equals(ACCEPTED.getValue())) {
             salaryIncrementDto.setAcceptDate(LocalDate.now());
