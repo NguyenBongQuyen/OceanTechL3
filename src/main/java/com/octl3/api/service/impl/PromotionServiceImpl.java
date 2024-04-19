@@ -79,7 +79,9 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByManager(long id, PromotionDto promotionDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        PromotionDto existedPromotionDto = this.getById(id);
+        userValidator.checkCreateByManager(existedPromotionDto.getCreateBy());
+        statusValidator.checkValidStatusForManagerUpdate(existedPromotionDto.getStatus());
         employeeValidator.existsById(promotionDto.getEmployeeId());
         promotionDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROMOTION_BY_MANAGER, PROMOTION_DTO_MAPPER)
@@ -92,7 +94,9 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void submit(long id, PromotionDto promotionDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        PromotionDto existedPromotionDto = this.getById(id);
+        userValidator.checkCreateByManager(existedPromotionDto.getCreateBy());
+        statusValidator.checkValidStatusForSubmit(existedPromotionDto.getStatus());
         userValidator.checkExistLeaderId(promotionDto.getLeaderId());
         promotionDto.setStatus(Status.PENDING.getValue());
         promotionDto.setSubmitDate(LocalDate.now());
@@ -106,7 +110,9 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto updateByLeader(long id, PromotionDto promotionDto) {
-        userValidator.checkIsForLeader(this.getById(id).getLeaderId());
+        PromotionDto existedPromotionDto = this.getById(id);
+        userValidator.checkIsForLeader(existedPromotionDto.getLeaderId());
+        statusValidator.checkValidStatusForLeaderUpdate(existedPromotionDto.getStatus());
         statusValidator.checkValidLeaderStatus(promotionDto.getStatus());
         if (promotionDto.getStatus().equals(ACCEPTED.getValue())) {
             promotionDto.setAcceptDate(LocalDate.now());

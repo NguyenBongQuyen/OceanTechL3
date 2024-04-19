@@ -78,7 +78,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByManager(long id, RegistrationDto registrationDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        RegistrationDto existedRegistrationDto = this.getById(id);
+        userValidator.checkCreateByManager(existedRegistrationDto.getCreateBy());
+        statusValidator.checkValidStatusForManagerUpdate(existedRegistrationDto.getStatus());
         employeeValidator.existsById(registrationDto.getEmployeeId());
         registrationDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_REGISTRATION_BY_MANAGER, REGISTRATION_DTO_MAPPER)
@@ -91,7 +93,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void submit(long id, RegistrationDto registrationDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        RegistrationDto existedRegistrationDto = this.getById(id);
+        userValidator.checkCreateByManager(existedRegistrationDto.getCreateBy());
+        statusValidator.checkValidStatusForSubmit(existedRegistrationDto.getStatus());
         userValidator.checkExistLeaderId(registrationDto.getLeaderId());
         registrationDto.setStatus(PENDING.getValue());
         registrationDto.setSubmitDate(LocalDate.now());
@@ -105,7 +109,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto updateByLeader(long id, RegistrationDto registrationDto) {
-        userValidator.checkIsForLeader(this.getById(id).getLeaderId());
+        RegistrationDto existedRegistrationDto = this.getById(id);
+        statusValidator.checkValidStatusForLeaderUpdate(existedRegistrationDto.getStatus());
+        userValidator.checkIsForLeader(existedRegistrationDto.getLeaderId());
         statusValidator.checkValidLeaderStatus(registrationDto.getStatus());
         if (registrationDto.getStatus().equals(ACCEPTED.getValue())) {
             registrationDto.setAcceptDate(LocalDate.now());
