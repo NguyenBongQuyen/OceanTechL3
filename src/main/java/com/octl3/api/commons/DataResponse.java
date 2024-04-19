@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class DataResponse<T> {
     private T data;
-    private int code;
-    private String message;
+    private final int code;
+    private final String message;
 
     public DataResponse(T data, ErrorMessage message) {
         this.data = data;

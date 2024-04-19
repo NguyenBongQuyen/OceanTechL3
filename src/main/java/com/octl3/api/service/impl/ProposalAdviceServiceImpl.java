@@ -79,7 +79,9 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByManager(long id, ProposalAdviceDto proposalAdviceDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        ProposalAdviceDto existedProposalAdviceDto = this.getById(id);
+        userValidator.checkCreateByManager(existedProposalAdviceDto.getCreateBy());
+        statusValidator.checkValidStatusForManagerUpdate(existedProposalAdviceDto.getStatus());
         employeeValidator.existsById(proposalAdviceDto.getEmployeeId());
         proposalAdviceDto.setStatus(UPDATED.getValue());
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(UPDATE_PROPOSAL_ADVICE_BY_MANAGER, PROPOSAL_ADVICE_DTO_MAPPER)
@@ -92,7 +94,9 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public void submit(long id, ProposalAdviceDto proposalAdviceDto) {
-        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        ProposalAdviceDto existedProposalAdviceDto = this.getById(id);
+        userValidator.checkCreateByManager(existedProposalAdviceDto.getCreateBy());
+        statusValidator.checkValidStatusForSubmit(existedProposalAdviceDto.getStatus());
         userValidator.checkExistLeaderId(proposalAdviceDto.getLeaderId());
         proposalAdviceDto.setStatus(Status.PENDING.getValue());
         proposalAdviceDto.setSubmitDate(LocalDate.now());
@@ -106,7 +110,9 @@ public class ProposalAdviceServiceImpl implements ProposalAdviceService {
 
     @Override
     public ProposalAdviceDto updateByLeader(long id, ProposalAdviceDto proposalAdviceDto) {
-        userValidator.checkIsForLeader(this.getById(id).getLeaderId());
+        ProposalAdviceDto existedProposalAdviceDto = this.getById(id);
+        statusValidator.checkValidStatusForLeaderUpdate(existedProposalAdviceDto.getStatus());
+        userValidator.checkIsForLeader(existedProposalAdviceDto.getLeaderId());
         statusValidator.checkValidLeaderStatus(proposalAdviceDto.getStatus());
         if (proposalAdviceDto.getStatus().equals(ACCEPTED.getValue())) {
             proposalAdviceDto.setAcceptDate(LocalDate.now());

@@ -18,4 +18,23 @@ public class StatusValidator {
             throw new OctException(ErrorMessages.INVALID_STATUS);
         }
     }
+
+    public void checkValidStatusForManagerUpdate(String status) {
+        if (!Status.isValidStatusForManagerUpdate(status)) {
+            throw new OctException(ErrorMessages.NOT_ALLOW_UPDATE);
+        }
+    }
+
+    public void checkValidStatusForSubmit(String status) {
+        if (!Status.isValidStatusForSubmit(status)) {
+            throw new OctException(ErrorMessages.NOT_ALLOW_UPDATE);
+        }
+    }
+
+    public void checkValidStatusForLeaderUpdate(String status) {
+        if (!Status.isValidStatusForLeaderUpdate(status)) {
+            throw new OctException(ErrorMessages.NOT_ALLOW_UPDATE);
+        }
+    }
+
 }

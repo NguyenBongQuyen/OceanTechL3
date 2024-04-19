@@ -20,6 +20,7 @@ public enum ErrorMessages implements ErrorMessage {
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOT_ALLOW(403_001, "Not allow access this resource"),
+    NOT_ALLOW_UPDATE(403_002,"Can not update the record in this state"),
     NOT_FOUND(404, "Resource not found"),
     NOT_FOUND_LEADER_ID(404_001, "Leader Id not found"),
     NOT_FOUND_EMPLOYEE_ID(404_002, "Employee Id not found"),
