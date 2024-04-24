@@ -73,11 +73,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto update(long id, EmployeeDto employeeDto, MultipartFile fileImage) {
-        userValidator.checkCreateByManager(getById(id).getCreateBy());
+        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
         EmployeeDto existingEmployeeDto = this.getById(id);
         employeeValidator.checkUpdate(employeeDto, existingEmployeeDto);
         if (!fileImage.isEmpty()) {
-            UploadFile.deleteImage(getById(id).getImage());
+            UploadFile.deleteImage(this.getById(id).getImage());
             employeeDto.setImage(UploadFile.uploadImage(fileImage, EMPLOYEE_IMAGE_PREFIX));
         }
         StoredProcedureQuery query =
@@ -92,8 +92,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteById(long id) {
         employeeValidator.existsById(id);
-        userValidator.checkCreateByManager(getById(id).getCreateBy());
-        UploadFile.deleteImage(getById(id).getImage());
+        userValidator.checkCreateByManager(this.getById(id).getCreateBy());
+        UploadFile.deleteImage(this.getById(id).getImage());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Employee.DELETE)
                         .registerStoredProcedureParameter(Parameter.EMPLOYEE_ID_PARAM, Long.class, ParameterMode.IN)

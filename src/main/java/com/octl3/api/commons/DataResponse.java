@@ -27,10 +27,6 @@ public class DataResponse<T> {
         this.message = ErrorMessages.SUCCESS.getMessage();
     }
 
-    public static <T> DataResponse<T> build(ErrorMessage messages) {
-        return new DataResponse<>(messages);
-    }
-
     public static <T> DataResponse<T> build(T data, ErrorMessage messages) {
         return new DataResponse<>(data, messages);
     }

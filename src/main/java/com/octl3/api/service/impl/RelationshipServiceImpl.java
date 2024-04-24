@@ -26,7 +26,6 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Override
     public RelationshipDto create(RelationshipDto relationshipDto) {
         employeeValidator.existsById(relationshipDto.getEmployeeId());
-        relationshipValidator.checkCreate(relationshipDto);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.CREATE, Mapper.RELATIONSHIP_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_JSON, String.class, ParameterMode.IN)
@@ -58,8 +57,6 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Override
     public RelationshipDto update(long id, RelationshipDto relationshipDto) {
         employeeValidator.existsById(relationshipDto.getEmployeeId());
-        RelationshipDto existingRelationshipDto = this.getById(id);
-        relationshipValidator.checkUpdate(relationshipDto, existingRelationshipDto);
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(Relationship.UPDATE, Mapper.RELATIONSHIP_DTO_MAPPER)
                 .registerStoredProcedureParameter(Parameter.RELATIONSHIP_ID_PARAM, Long.class, ParameterMode.IN)

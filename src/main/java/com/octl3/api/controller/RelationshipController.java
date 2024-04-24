@@ -33,7 +33,7 @@ public class RelationshipController {
 
     @PutMapping("/{id}")
     public DataResponse<RelationshipDto> update(@PathVariable("id") long id,
-                                                @RequestBody RelationshipDto relationshipDto) {
+                                                @Valid @RequestBody RelationshipDto relationshipDto) {
         return DataResponse.ok(relationshipService.update(id, relationshipDto));
     }
 
