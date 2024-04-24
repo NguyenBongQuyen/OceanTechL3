@@ -77,7 +77,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public ProfileEndDto updateByManager(long id, ProfileEndDto profileEndDto) {
-        userValidator.checkCreateByManager(getById(id).getEndBy());
+        userValidator.checkCreateByManager(this.getById(id).getEndBy());
         registrationValidator.existsById(profileEndDto.getRegistrationId());
         profileEndDto.setStatus(Status.UPDATED.getValue());
         StoredProcedureQuery query =
@@ -91,7 +91,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public void submit(long id, ProfileEndDto profileEndDto) {
-        userValidator.checkCreateByManager(getById(id).getEndBy());
+        userValidator.checkCreateByManager(this.getById(id).getEndBy());
         userValidator.checkExistLeaderId(profileEndDto.getLeaderId());
         profileEndDto.setStatus(Status.PENDING.getValue());
         profileEndDto.setSubmitDate(LocalDate.now());
@@ -106,7 +106,8 @@ public class ProfileEndServiceImpl implements ProfileEndService {
 
     @Override
     public ProfileEndDto updateByLeader(long id, ProfileEndDto profileEndDto) {
-        userValidator.checkIsForLeader(getById(id).getLeaderId());
+        ProfileEndDto existedProfileEndDto = this.getById(id);
+        userValidator.checkIsForLeader(existedProfileEndDto.getLeaderId());
         statusValidator.checkValidLeaderStatus(profileEndDto.getStatus());
         if (profileEndDto.getStatus().equals(Status.ACCEPTED.getValue())) {
             profileEndDto.setAcceptDate(LocalDate.now());
@@ -126,7 +127,7 @@ public class ProfileEndServiceImpl implements ProfileEndService {
     @Override
     public void deleteById(long id) {
         profileEndValidator.existsById(id);
-        userValidator.checkCreateByManager(getById(id).getEndBy());
+        userValidator.checkCreateByManager(this.getById(id).getEndBy());
         StoredProcedureQuery query =
                 entityManager.createStoredProcedureQuery(ProfileEnd.DELETE, Mapper.PROFILE_END_DTO_MAPPER)
                         .registerStoredProcedureParameter(Parameter.PROFILE_END_ID_PARAM, Long.class, ParameterMode.IN)

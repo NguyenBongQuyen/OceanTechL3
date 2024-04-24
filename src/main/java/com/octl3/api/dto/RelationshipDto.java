@@ -1,5 +1,6 @@
 package com.octl3.api.dto;
 
+import com.octl3.api.validator.anotations.CitizenId;
 import com.octl3.api.validator.anotations.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class RelationshipDto {
     @Phone
     private String phone;
     private String address;
+    @CitizenId
     private String citizenId;
     private String relationship;
 }

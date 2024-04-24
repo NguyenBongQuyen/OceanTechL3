@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
         if (ObjectUtils.isEmpty(userDto.getRoleId()) || !roleService.isExistRoleById(userDto.getRoleId())) {
             userDto.setRoleId(roleService.getRoleByName(MANAGER).getId()); // set default role
         }
-
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(CREATE_USER, USER_RESPONSE_DTO_MAPPER)
                 .registerStoredProcedureParameter(USER_JSON, String.class, ParameterMode.IN)
                 .setParameter(USER_JSON, JsonUtil.objectToJson(userDto));
@@ -71,7 +70,6 @@ public class UserServiceImpl implements UserService {
                             userLogin.getPassword()
                     )
             );
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
             return new TokenResponse(jwt);

@@ -28,7 +28,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDto getRoleByName(String roleName) {
-
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(GET_ROLE_BY_NAME, ROLE_DTO_MAPPER)
                 .registerStoredProcedureParameter(ROLE_NAME_PARAM, String.class, ParameterMode.IN)
                 .setParameter(ROLE_NAME_PARAM, roleName);
